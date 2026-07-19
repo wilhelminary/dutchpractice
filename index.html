@@ -601,7 +601,7 @@ function save(s){if(HAS_LS){try{localStorage.setItem(KEY,JSON.stringify(s));retu
 function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function dayNum(){return Math.floor(Date.now()/86400000);}
 function freshState(){
-  const unit={}; UNITS.forEach((u,i)=>unit[u.id]={status:i===0?"active":"locked",mastery:0});
+  const unit={}; UNITS.forEach((u,i)=>unit[u.id]={status:"active",mastery:0});
   return {unit, placed:false, cards:{}, dayStreak:0, lastDay:null, reviews:0, right:0, mistakes:[]};
 }
 let S=load()||freshState();
@@ -629,10 +629,14 @@ if(!S.dialogues) S.dialogues=[];
       }
     });
   });
-  // safety net: if NOTHING is active/done anywhere (fully fresh or fully locked), open the first unit
-  const anyOpen = UNITS.some(u=>S.unit[u.id] && S.unit[u.id].status!=="locked");
-  if(!anyOpen && UNITS.length){ S.unit[UNITS[0].id]={status:"active",mastery:0}; }
-  if(added) save(S);
+  // UNLOCK ALL: every unit is openable. Convert any locked unit to active,
+  // but keep completed units marked done (and preserve their mastery).
+  let unlocked=false;
+  UNITS.forEach(u=>{
+    const st=S.unit[u.id];
+    if(st && st.status==="locked"){ st.status="active"; unlocked=true; }
+  });
+  if(added||unlocked) save(S);
 })();
 (function(){const t=today();if(S.lastDay!==t){if(S.lastDay){const gap=Math.round((new Date(t)-new Date(S.lastDay))/86400000);S.dayStreak=gap===1?S.dayStreak+1:1;}else S.dayStreak=1;S.lastDay=t;save(S);}})();
 
@@ -747,8 +751,7 @@ function finishPlacement(landIdx){
   LEVELS.forEach((L,li)=>{
     L.units.forEach(u=>{
       if(li<landIdx){ S.unit[u.id]={status:"done",mastery:Math.max((S.unit[u.id]&&S.unit[u.id].mastery)||0,0.7)}; }
-      else if(li===landIdx && firstActive===null){ S.unit[u.id]={status:"active",mastery:0}; firstActive=u.id; }
-      else { S.unit[u.id]={status:"locked",mastery:0}; }
+      else { S.unit[u.id]={status:"active",mastery:(S.unit[u.id]&&S.unit[u.id].mastery)||0}; if(firstActive===null&&li===landIdx)firstActive=u.id; }
     });
   });
   if(landIdx>=LEVELS.length){ // passed everything — unlock all, active last
