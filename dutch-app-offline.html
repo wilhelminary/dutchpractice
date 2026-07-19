@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nederlands — leren van nul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#12100E; --card:#1C1A17; --card2:#232019; --ink:#F2EEE6; --ink-soft:#A39B8B;
+    --rule:#332F28; --gold:#D6A756; --gold-tint:#3A2F1A; --sage:#8FB08A; --sage-tint:#233026;
+    --brick:#D08A6E; --brick-tint:#3A251C; --blue:#8FA9C4; --lock:#4A443A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh;padding:24px 18px 90px;display:flex;justify-content:center;-webkit-font-smoothing:antialiased}
+  .wrap{width:100%;max-width:660px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .brand{font-family:"Fraunces",serif;font-weight:600;font-size:22px;letter-spacing:-0.01em}
+  .brand span{color:var(--gold)}
+  .streakpill{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-soft);border:1px solid var(--rule);border-radius:100px;padding:5px 11px}
+  .streakpill b{color:var(--gold)}
+  nav{display:flex;gap:4px;margin:18px 0 22px;border-bottom:1px solid var(--rule)}
+  nav button{font-family:"Public Sans",sans-serif;font-size:14px;font-weight:500;background:none;border:none;color:var(--ink-soft);cursor:pointer;padding:9px 14px;border-bottom:2px solid transparent;margin-bottom:-1px}
+  nav button.on{color:var(--ink);border-bottom-color:var(--gold)}
+  nav button:hover{color:var(--ink)}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:22px}
+  .cta{display:block;width:100%;font-family:"Public Sans",sans-serif;font-size:16px;font-weight:600;background:var(--gold);color:#1a1305;border:none;border-radius:5px;padding:14px;cursor:pointer}
+  .cta:hover{filter:brightness(1.06)}
+  .cta.small{width:auto;padding:10px 18px;font-size:14px}
+  .cta.ghost{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+  .cta.ghost:hover{border-color:var(--gold)}
+
+  /* placement banner */
+  .banner{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--gold-tint);border-radius:6px;padding:22px;margin-bottom:20px}
+  .banner .lead{font-family:"Fraunces",serif;font-size:15px;color:var(--gold);margin-bottom:4px}
+  .banner .big{font-family:"Fraunces",serif;font-size:24px;font-weight:600;line-height:1.2;margin-bottom:6px}
+  .banner p{color:var(--ink-soft);font-size:14px;margin-bottom:16px}
+
+  /* skill tree */
+  .level{margin-bottom:26px}
+  .level-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .level-badge{font-family:"Fraunces",serif;font-weight:700;font-size:13px;letter-spacing:0.05em;color:var(--paper);background:var(--gold);border-radius:4px;padding:3px 9px}
+  .level-line{flex:1;height:1px;background:var(--rule)}
+  .level-note{font-size:12px;color:var(--ink-soft)}
+  .units{display:flex;flex-direction:column;gap:8px}
+  .unit{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;cursor:pointer;transition:border-color .15s}
+  .unit:hover{border-color:var(--ink-soft)}
+  .unit.locked{opacity:.5;cursor:not-allowed}
+  .unit.locked:hover{border-color:var(--rule)}
+  .unit.done{border-color:var(--sage-tint)}
+  .u-dot{flex:0 0 34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:13px;background:var(--card2);border:1px solid var(--rule)}
+  .unit.done .u-dot{background:var(--sage-tint);border-color:var(--sage);color:var(--sage)}
+  .unit.active .u-dot{background:var(--gold-tint);border-color:var(--gold);color:var(--gold)}
+  .u-body{flex:1;min-width:0}
+  .u-title{font-weight:600;font-size:15px}
+  .u-sub{font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .u-meta{flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-soft)}
+  .u-lock{flex:0 0 auto;color:var(--lock)}
+  .mastery{height:4px;background:var(--card2);border-radius:100px;margin-top:6px;overflow:hidden}
+  .mastery i{display:block;height:100%;background:var(--sage);border-radius:100px}
+
+  /* lesson */
+  .lesson h2{font-family:"Fraunces",serif;font-size:24px;font-weight:600;letter-spacing:-0.01em;margin-bottom:4px}
+  .lesson .lvl{font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--gold);margin-bottom:16px}
+  .lesson .teach{font-size:15.5px;line-height:1.7}
+  .lesson .teach p{margin-bottom:13px}
+  .lesson .teach b{color:var(--ink);font-weight:600}
+  .lesson .teach em{color:var(--gold);font-style:normal;font-family:"JetBrains Mono",monospace;font-size:14px}
+  .lesson .box{background:var(--card2);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;margin:14px 0;font-size:14.5px}
+  .lesson .box .ex{font-family:"JetBrains Mono",monospace;font-size:14px;margin:4px 0}
+  .lesson table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  .lesson th,.lesson td{border:1px solid var(--rule);padding:7px 10px;text-align:left}
+  .lesson th{background:var(--card2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-soft)}
+  .lesson td em{color:var(--gold);font-family:"JetBrains Mono",monospace}
+
+  /* exercise (shared with earlier build) */
+  .ex-wrap .eyebrow{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px}
+  .ex-wrap .eyebrow .kind{color:var(--gold)}
+  .progressbar{height:4px;background:var(--card2);border-radius:100px;margin-bottom:20px;overflow:hidden}
+  .progressbar i{display:block;height:100%;background:var(--gold);transition:width .3s}
+  .prompt{font-family:"Fraunces",serif;font-weight:500;font-size:23px;line-height:1.32;margin-bottom:6px}
+  .subhint{font-size:14px;color:var(--ink-soft);font-style:italic;margin-bottom:18px}
+  .gapline{font-family:"JetBrains Mono",monospace;font-size:17px;line-height:1.9;margin-bottom:18px}
+  .gapline .slot{color:var(--gold);border-bottom:1px dashed var(--gold);padding:0 18px}
+  input[type=text]{width:100%;font-family:"JetBrains Mono",monospace;font-size:16px;padding:13px 14px;border:1px solid var(--rule);border-radius:5px;background:#0d0b09;color:var(--ink)}
+  input[type=text]:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+  input[type=text]:disabled{opacity:.6}
+  .choices{display:grid;gap:9px}
+  .choice{font-family:"JetBrains Mono",monospace;font-size:15px;text-align:left;background:#0d0b09;border:1px solid var(--rule);color:var(--ink);border-radius:5px;padding:13px 15px;cursor:pointer}
+  .choice:hover{border-color:var(--ink-soft)}
+  .choice.picked{border-color:var(--gold)}
+  .choice.right{border-color:var(--sage);background:var(--sage-tint)}
+  .choice.wrong{border-color:var(--brick);background:var(--brick-tint)}
+  .row{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+  button.act{font-family:"Public Sans",sans-serif;font-size:14px;font-weight:600;padding:11px 20px;border-radius:5px;border:none;background:var(--gold);color:#1a1305;cursor:pointer}
+  button.ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--rule)}
+  button.ghost:hover{color:var(--ink);border-color:var(--ink-soft)}
+  button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .verdict{margin-top:18px;border-radius:6px;padding:15px 16px;border:1px solid var(--rule)}
+  .verdict.good{border-color:var(--sage);background:var(--sage-tint)}
+  .verdict.bad{border-color:var(--brick);background:var(--brick-tint)}
+  .verdict h3{font-family:"Fraunces",serif;font-size:15px;font-weight:600;margin-bottom:8px}
+  .verdict.good h3{color:var(--sage)} .verdict.bad h3{color:var(--brick)}
+  .answer{font-family:"JetBrains Mono",monospace;font-size:15px;margin:7px 0;word-break:break-word}
+  .answer .bad-tok{color:var(--brick);text-decoration:line-through} .answer .fix{color:var(--sage);font-weight:500}
+  .diag{font-size:14.5px;margin-top:9px}
+  .rulebox{font-size:13px;color:var(--ink-soft);margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.07)}
+  .sched{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-soft);margin-top:8px}
+  /* copy-and-correct reproduction step */
+  .repro{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.07)}
+  .repro .lbl{font-size:13px;color:var(--ink-soft);margin-bottom:8px}
+  .repro .lbl b{color:var(--gold)}
+  .repro input{width:100%;font-family:"JetBrains Mono",monospace;font-size:16px;padding:12px 14px;border:1px solid var(--gold);border-radius:5px;background:#0d0b09;color:var(--ink)}
+  .repro input:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .repro input.matched{border-color:var(--sage);outline-color:var(--sage)}
+  .repro .hint{font-size:12px;color:var(--ink-soft);margin-top:7px;min-height:16px}
+  .repro .hint.ok{color:var(--sage)}
+  .center{text-align:center}
+  .big-num{font-family:"Fraunces",serif;font-size:40px;font-weight:600;color:var(--gold);line-height:1}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .muted{color:var(--ink-soft);font-size:14px}
+  .set p{color:var(--ink-soft);font-size:14px;margin-bottom:14px}
+  textarea{width:100%;height:110px;font-family:"JetBrains Mono",monospace;font-size:12px;background:#0d0b09;color:var(--ink);border:1px solid var(--rule);border-radius:5px;padding:12px;resize:vertical}
+  .danger{color:var(--brick)}
+  .note{font-size:12.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">Neder<span>lands</span></div>
+    <div class="streakpill">streak <b id="dstreak">0</b></div>
+  </header>
+  <nav>
+    <button data-tab="learn" class="on">Learn</button>
+    <button data-tab="review">Review</button>
+    <button data-tab="gen">Generate</button>
+    <button data-tab="mistakes">Mistakes</button>
+    <button data-tab="drill">AI ∞</button>
+    <button data-tab="data">Data</button>
+  </nav>
+  <div id="view"></div>
+</div>
+
+<script>
+/* =========================================================================
+   CURRICULUM
+   Levels → units. Each unit: id, title, sub, a lesson (HTML), and exercises.
+   Exercise types: type | gap | mc.  Each carries its own answer + rule.
+   placement: a subset flagged for the placement test, ascending difficulty.
+========================================================================= */
+const LEVELS = [
+  { code:"A0", note:"the absolute basics", units:[
+    { id:"a0_thisis", title:"This is / a & the", sub:"een, de, het, dit is",
+      lesson:`<p>Dutch has two words for <b>“the”</b>: <em>de</em> and <em>het</em>. There's no deep logic — you learn each noun <b>with</b> its article. Two useful anchors: <b>all plurals</b> take <em>de</em>, and <b>all diminutives</b> (words ending <em>-je</em>) take <em>het</em>.</p>
+      <p><b>“A”</b> is always <em>een</em>, for every noun.</p>
+      <div class="box"><div class="ex">de man · de vrouw · <b>het</b> huis · <b>het</b> kind</div><div class="ex">een man · een huis (a/an never changes)</div></div>
+      <p><b>“This is”</b> = <em>dit is</em>. <b>“That is”</b> = <em>dat is</em>.</p>`,
+      ex:[
+        {type:"mc", en:"'A house' — which article?", stem:"___ huis", choices:["een","de","het","dit"], answer:"een", rule:"'A' is always een."},
+        {type:"mc", en:"'The house'", stem:"___ huis", choices:["het","de","een","dat"], answer:"het", rule:"huis is a het-word."},
+        {type:"type", en:"This is a man.", ok:["dit is een man"], rule:"dit is = this is."},
+        {type:"gap", en:"The woman (de/het?)", template:"___ vrouw", ok:["de"], rule:"vrouw is a de-word."}
+      ]},
+    { id:"a0_ben", title:"To be: zijn", sub:"ik ben, jij bent, hij is",
+      lesson:`<p>The verb <em>zijn</em> (“to be”) is irregular and you'll use it constantly. Learn all six forms cold:</p>
+      <table><tr><th>person</th><th>form</th></tr><tr><td>ik</td><td><em>ben</em></td></tr><tr><td>jij / je</td><td><em>bent</em></td></tr><tr><td>hij / zij / het</td><td><em>is</em></td></tr><tr><td>wij / we</td><td><em>zijn</em></td></tr><tr><td>jullie</td><td><em>zijn</em></td></tr><tr><td>zij (they)</td><td><em>zijn</em></td></tr></table>`,
+      ex:[
+        {type:"gap", en:"I am tired.", template:"ik ___ moe", ok:["ben"], rule:"ik ben."},
+        {type:"gap", en:"You are nice. (informal)", template:"jij ___ aardig", ok:["bent"], rule:"jij bent."},
+        {type:"mc", en:"He ___ big.", stem:"hij ___ groot", choices:["is","ben","bent","zijn"], answer:"is", rule:"hij is."},
+        {type:"type", en:"We are happy.", ok:["wij zijn blij","we zijn blij"], rule:"wij zijn."}
+      ]},
+    { id:"a0_plural", title:"Plurals", sub:"-en and -s",
+      lesson:`<p>Most Dutch nouns pluralise with <em>-en</em>. A smaller group takes <em>-s</em> — mainly words ending in <em>-el, -er, -en, -je</em>, and most vowels.</p>
+      <div class="box"><div class="ex">boek → boek<b>en</b> · huis → huiz<b>en</b> · man → mann<b>en</b></div><div class="ex">tafel → tafel<b>s</b> · meisje → meisje<b>s</b></div></div>
+      <p>Watch the spelling shift: <em>huis → huizen</em> (s→z), <em>man → mannen</em> (double the n to keep the vowel short). That doubling rule returns everywhere.</p>`,
+      ex:[
+        {type:"type", en:"Plural of 'boek'.", ok:["boeken"], rule:"-en plural."},
+        {type:"mc", en:"Plural of 'tafel'.", stem:"twee ___", choices:["tafels","tafelen","tafels","tafles"], answer:"tafels", rule:"-el words take -s."},
+        {type:"type", en:"Plural of 'man'.", ok:["mannen"], rule:"double the n: mannen."}
+      ]}
+  ]},
+
+  { code:"A1", note:"present tense & simple sentences", units:[
+    { id:"a1_present", title:"Present tense", sub:"ik werk, jij werkt, hij werkt",
+      lesson:`<p>Regular Dutch verbs in the present are simple. Take the <b>stem</b> (infinitive minus <em>-en</em>): <em>werken → werk</em>. Then:</p>
+      <table><tr><th>person</th><th>ending</th><th>example</th></tr><tr><td>ik</td><td>stem</td><td><em>ik werk</em></td></tr><tr><td>jij / hij / zij / het</td><td>stem + <b>t</b></td><td><em>jij werkt</em></td></tr><tr><td>wij / jullie / zij</td><td>full infinitive</td><td><em>wij werken</em></td></tr></table>
+      <p>One quirk: in a question, <b>jij drops the -t</b> after the verb — <em>werk jij?</em>, not <em>werkt jij?</em></p>`,
+      ex:[
+        {type:"gap", en:"I work in Amsterdam.", template:"ik ___ in Amsterdam", ok:["werk"], rule:"ik + stem."},
+        {type:"gap", en:"She drinks coffee.", template:"zij ___ koffie", ok:["drinkt"], rule:"hij/zij + stem + t."},
+        {type:"type", en:"We live in Utrecht. (wonen)", ok:["wij wonen in utrecht","we wonen in utrecht"], rule:"plural = infinitive."},
+        {type:"mc", en:"Question form: do you play?", stem:"___ jij?", choices:["speel","speelt","spelen","gespeeld"], answer:"speel", rule:"jij drops -t in a question."}
+      ]},
+    { id:"a1_wordorder", title:"Word order: verb second", sub:"the finite verb owns slot 2",
+      lesson:`<p>The single most important rule in Dutch: <b>the conjugated verb is always the second element</b> of a main clause. If something other than the subject comes first, the subject jumps to <b>after</b> the verb. This is called <b>inversie</b>.</p>
+      <div class="box"><div class="ex">Ik ga morgen naar huis.</div><div class="ex">Morgen <b>ga ik</b> naar huis. ← not “Morgen ik ga”</div></div>
+      <p>Slot 1 holds exactly <b>one</b> thing. The verb is always right behind it.</p>`,
+      ex:[
+        {type:"type", en:"Tomorrow I'm going home. (start: Morgen)", ok:["morgen ga ik naar huis"], traps:[[/morgen ik ga/,"Inversie: Morgen ga ik…"]], rule:"Verb in slot 2 → subject moves behind it."},
+        {type:"type", en:"Today I work. (start: Vandaag)", ok:["vandaag werk ik"], traps:[[/vandaag ik werk/,"Vandaag werk ik."]], rule:"Inversion after a fronted element."},
+        {type:"mc", en:"Which is correct?", stem:"'Now I eat.'", choices:["Nu eet ik","Nu ik eet","Ik nu eet","Nu ik eten"], answer:"Nu eet ik", rule:"Verb second."}
+      ]},
+    { id:"a1_hebben", title:"To have & to go", sub:"hebben, gaan",
+      lesson:`<p>Two more essential irregulars.</p>
+      <table><tr><th></th><th>hebben</th><th>gaan</th></tr><tr><td>ik</td><td><em>heb</em></td><td><em>ga</em></td></tr><tr><td>jij</td><td><em>hebt</em></td><td><em>gaat</em></td></tr><tr><td>hij/zij</td><td><em>heeft</em></td><td><em>gaat</em></td></tr><tr><td>wij/jullie/zij</td><td><em>hebben</em></td><td><em>gaan</em></td></tr></table>`,
+      ex:[
+        {type:"mc", en:"He ___ a car.", stem:"hij ___ een auto", choices:["heeft","hebt","heb","hebben"], answer:"heeft", rule:"hij heeft."},
+        {type:"gap", en:"I have a dog.", template:"ik ___ een hond", ok:["heb"], rule:"ik heb."},
+        {type:"type", en:"We go to school.", ok:["wij gaan naar school","we gaan naar school"], rule:"wij gaan."}
+      ]}
+  ]},
+
+  { code:"A2", note:"the past & richer verbs", units:[
+    { id:"a2_perfect", title:"Perfect tense", sub:"ik heb gewerkt",
+      lesson:`<p>The perfect is Dutch's main spoken past tense: an auxiliary (<em>hebben</em> or <em>zijn</em>) + a <b>past participle</b> at the end.</p>
+      <p>Regular participle = <em>ge-</em> + stem + <b>-t</b> or <b>-d</b>. Which ending? The <b>'t kofschip</b> rule: if the stem ends in t, k, f, s, ch, p → <b>-t</b>; otherwise → <b>-d</b>.</p>
+      <div class="box"><div class="ex">werken → <b>gewerkt</b> (k → t)</div><div class="ex">spelen → <b>gespeeld</b> (l → d)</div></div>
+      <p>The participle goes to the <b>very end</b>: <em>Ik heb gisteren hard gewerkt.</em></p>`,
+      ex:[
+        {type:"type", en:"I have worked.", ok:["ik heb gewerkt"], rule:"ge + werk + t."},
+        {type:"gap", en:"I have played football.", template:"ik heb voetbal ___", ok:["gespeeld"], rule:"ge + speel + d."},
+        {type:"mc", en:"Participle of 'maken'.", stem:"ik heb het ___", choices:["gemaakt","gemaakd","gemaken","maakte"], answer:"gemaakt", rule:"k → t: gemaakt."}
+      ]},
+    { id:"a2_hebzijn", title:"hebben or zijn?", sub:"the auxiliary split",
+      lesson:`<p>In the perfect, most verbs take <em>hebben</em> — but verbs of <b>change of location or state</b> take <em>zijn</em>: <em>gaan, komen, worden, blijven, beginnen, stoppen</em>.</p>
+      <div class="box"><div class="ex">Ik <b>heb</b> gewerkt.</div><div class="ex">Ik <b>ben</b> naar huis gegaan.</div><div class="ex">Hij <b>is</b> ziek geworden.</div></div>
+      <p><b>The trap:</b> movement verbs like <em>fietsen, lopen, rijden</em> take <em>zijn</em> only when there's a <b>destination</b>. <em>Ik heb gefietst</em> (activity) vs <em>Ik ben naar school gefietst</em> (destination).</p>`,
+      ex:[
+        {type:"mc", en:"She has gone home.", stem:"zij ___ naar huis gegaan", choices:["is","heeft","hebt","was"], answer:"is", rule:"gaan → zijn."},
+        {type:"type", en:"I cycled to school. (destination)", ok:["ik ben naar school gefietst"], traps:[[/heb/,"Destination → zijn."]], rule:"movement + destination → zijn."},
+        {type:"type", en:"I cycled for an hour. (no destination)", ok:["ik heb een uur gefietst"], traps:[[/ben/,"No destination → hebben."]], rule:"no destination → hebben."},
+        {type:"mc", en:"He has become ill.", stem:"hij ___ ziek geworden", choices:["is","heeft","was","wordt"], answer:"is", rule:"worden → zijn."}
+      ]},
+    { id:"a2_separable", title:"Separable verbs", sub:"opbellen, meenemen",
+      lesson:`<p>Many Dutch verbs have a detachable prefix: <em>opbellen</em> (to phone), <em>meenemen</em> (to bring along). Where the prefix goes depends on the sentence:</p>
+      <table><tr><th>situation</th><th>what happens</th></tr>
+      <tr><td>main clause</td><td>splits: <em>ik bel je op</em></td></tr>
+      <tr><td>participle</td><td>ge- in the middle: <em>opgebeld</em></td></tr>
+      <tr><td>after a modal</td><td>stays whole: <em>ik moet je opbellen</em></td></tr>
+      <tr><td>with te</td><td>te inside: <em>om je op te bellen</em></td></tr></table>`,
+      ex:[
+        {type:"type", en:"I call my mother. (opbellen)", ok:["ik bel mijn moeder op"], traps:[[/opbel mijn|ik opbel/,"Main clause splits: bel … op."]], rule:"Main clause: prefix to the end."},
+        {type:"type", en:"I have called him. (opbellen)", ok:["ik heb hem opgebeld"], traps:[[/geopbeld/,"ge- in the middle: opgebeld."]], rule:"Participle: prefix + ge + stem."},
+        {type:"type", en:"I have to call him.", ok:["ik moet hem opbellen"], rule:"After a modal: whole infinitive."}
+      ]},
+    { id:"a2_modals", title:"Modal verbs", sub:"kunnen, moeten, willen, mogen",
+      lesson:`<p>Modals send their second verb to the end as an <b>infinitive</b>.</p>
+      <table><tr><th></th><th>ik-form</th><th>meaning</th></tr><tr><td>kunnen</td><td><em>kan</em></td><td>can</td></tr><tr><td>moeten</td><td><em>moet</em></td><td>must</td></tr><tr><td>willen</td><td><em>wil</em></td><td>want</td></tr><tr><td>mogen</td><td><em>mag</em></td><td>may</td></tr></table>
+      <div class="box"><div class="ex">Ik <b>kan</b> Nederlands <b>spreken</b>.</div></div>`,
+      ex:[
+        {type:"gap", en:"I can swim.", template:"ik ___ zwemmen", ok:["kan"], rule:"kunnen → kan."},
+        {type:"type", en:"I want to go home.", ok:["ik wil naar huis gaan","ik wil naar huis"], rule:"willen → wil, infinitive to the end."},
+        {type:"mc", en:"You must work.", stem:"jij ___ werken", choices:["moet","moett","moeten","mag"], answer:"moet", rule:"jij moet."}
+      ]}
+  ]},
+
+  { code:"B1", note:"strong verbs, adjectives, clauses", units:[
+    { id:"b1_strong", title:"Strong verbs", sub:"vowel-change participles",
+      lesson:`<p>A few hundred common verbs are <b>strong</b>: the vowel mutates and the participle ends in <b>-en</b>, not -t/-d. They fall into vowel families — learn one, get the rest.</p>
+      <table><tr><th>family</th><th>example</th></tr><tr><td>ij → ee → e</td><td><em>schrijven → geschreven</em></td></tr><tr><td>ie/ui → oo → o</td><td><em>kiezen → gekozen</em></td></tr><tr><td>i → o → o</td><td><em>drinken → gedronken</em></td></tr><tr><td>e → a → o</td><td><em>nemen → genomen</em></td></tr></table>`,
+      ex:[
+        {type:"mc", en:"Participle of 'schrijven'.", stem:"ik heb een brief ___", choices:["geschreven","geschrijven","geschrijfd","schrijfde"], answer:"geschreven", rule:"ij → ee → e."},
+        {type:"type", en:"We drank beer. (drinken)", ok:["wij hebben bier gedronken","we hebben bier gedronken"], traps:[[/gedrinkt/,"Strong: gedronken."]], rule:"i → o → o."},
+        {type:"mc", en:"Participle of 'nemen'.", stem:"ik heb het ___", choices:["genomen","genemen","genoomd","neemde"], answer:"genomen", rule:"e → a → o."}
+      ]},
+    { id:"b1_adj", title:"Adjective endings", sub:"when to add -e",
+      lesson:`<p>An adjective before a noun usually takes <b>-e</b>. You drop it in exactly <b>one</b> case: a <b>het-word</b> that is <b>singular</b> AND <b>indefinite</b> (een / geen / no article).</p>
+      <div class="box"><div class="ex">de grot<b>e</b> man · het grot<b>e</b> huis · grot<b>e</b> huizen</div><div class="ex">een groot huis ← all three conditions met, so bare</div></div>`,
+      ex:[
+        {type:"mc", en:"a big house", stem:"een ___ huis", choices:["groot","grote","groote","grootte"], answer:"groot", rule:"het + singular + indefinite → no -e."},
+        {type:"type", en:"the big house", ok:["het grote huis"], traps:[[/het groot huis/,"Definite → -e."]], rule:"Definite → -e."},
+        {type:"type", en:"a nice woman (mooi)", ok:["een mooie vrouw"], rule:"de-word → -e."}
+      ]},
+    { id:"b1_diedat", title:"Relative clauses", sub:"die / dat",
+      lesson:`<p>“Who / which / that” is <em>die</em> for de-words and <em>dat</em> for het-words. The relative clause is a subordinate clause, so its verb goes to the <b>end</b>.</p>
+      <div class="box"><div class="ex">de man <b>die</b> daar staat</div><div class="ex">het boek <b>dat</b> ik lees</div></div>`,
+      ex:[
+        {type:"mc", en:"the man who works here", stem:"de man ___ hier werkt", choices:["die","dat","wie","wat"], answer:"die", rule:"de-word → die."},
+        {type:"gap", en:"the book that I read", template:"het boek ___ ik lees", ok:["dat"], rule:"het-word → dat."},
+        {type:"type", en:"the woman who lives here (wonen)", ok:["de vrouw die hier woont"], rule:"die + verb to the end."}
+      ]}
+  ]},
+
+  { code:"B2", note:"where your real errors live", units:[
+    { id:"b2_er", title:"The five jobs of 'er'", sub:"the boss fight",
+      lesson:`<p><em>er</em> does five jobs. The one that trips everyone: <b>er + preposition</b> replacing a thing. Dutch cannot say <em>met het</em> about an object — it fuses to <em>ermee</em>. And when an <b>adjective</b> is present, <em>er</em> leaps forward and the preposition strands at the end.</p>
+      <div class="box"><div class="ex">Ik denk <b>eraan</b>. (I think about it)</div><div class="ex">Ik ben <b>er</b> blij <b>mee</b>. (adjective splits them)</div><div class="ex">Ik heb <b>er</b> drie. (= of them)</div></div>`,
+      ex:[
+        {type:"type", en:"I'm happy with it. (watch the adjective)", ok:["ik ben er blij mee"], traps:[[/ermee|blij ermee/,"Adjective → split: er blij mee."]], rule:"er + adjective → split."},
+        {type:"gap", en:"Are you afraid of it? (bang voor)", template:"ben je ___ bang ___", ok:["er voor"], rule:"er + adjective + preposition → split."},
+        {type:"mc", en:"I have two of them.", stem:"ik heb ___ twee", choices:["er","—","ze","die"], answer:"er", rule:"er = of them."},
+        {type:"type", en:"I'm waiting for it. (wachten op)", ok:["ik wacht erop"], traps:[[/er op/,"Adjacent → fused: erop."]], rule:"Fused when adjacent."}
+      ]},
+    { id:"b2_passive", title:"The passive", sub:"worden + participle",
+      lesson:`<p>The passive uses <em>worden</em> + past participle. NT2 writing loves it because it sounds formal and objective.</p>
+      <div class="box"><div class="ex">De brief <b>wordt</b> geschreven. (is being written)</div><div class="ex">Er <b>wordt</b> veel gewerkt. (a lot of work is done)</div></div>
+      <p>Past passive uses <em>werd</em> (imperfect) or <em>is … geworden</em>.</p>`,
+      ex:[
+        {type:"gap", en:"The letter is being written.", template:"de brief ___ geschreven", ok:["wordt"], rule:"passive = worden + participle."},
+        {type:"mc", en:"A lot is worked here. (impersonal)", stem:"er ___ hier veel gewerkt", choices:["wordt","worden","is","word"], answer:"wordt", rule:"er wordt … gewerkt."}
+      ]},
+    { id:"b2_imperfect", title:"Perfect vs imperfect", sub:"sounding like B2",
+      lesson:`<p>Writing everything in the perfect reads as B1. B2 writing <b>opens</b> in the perfect, then narrates in the <b>imperfect</b> (<em>ik werkte, het regende</em>). And <em>zijn, hebben</em> and the modals almost always take the imperfect: <em>was, had, kon, moest, wilde</em>.</p>
+      <div class="box"><div class="ex">Ik ben verhuisd. Het <b>regende</b>, ik <b>kende</b> niemand, mijn kamer <b>was</b> koud.</div></div>`,
+      ex:[
+        {type:"gap", en:"It rained every day. (imperfect of regenen)", template:"het ___ elke dag", ok:["regende"], rule:"imperfect for narration."},
+        {type:"mc", en:"I was tired. (not 'ben geweest')", stem:"ik ___ moe", choices:["was","ben","heb","werd"], answer:"was", rule:"zijn → imperfect was in narration."},
+        {type:"type", en:"I couldn't sleep. (kunnen, imperfect)", ok:["ik kon niet slapen"], rule:"modal → imperfect kon."}
+      ]}
+  ]}
+];
+
+// Flatten units in curriculum order
+const UNITS=[]; LEVELS.forEach(L=>L.units.forEach(u=>{u.level=L.code;UNITS.push(u);}));
+const UNIT_INDEX={}; UNITS.forEach((u,i)=>UNIT_INDEX[u.id]=i);
+
+// Placement test: one representative item per level, ascending. If you pass a
+// level's probe you're assumed to know that level; you land at the first miss.
+const PLACEMENT=[
+  {level:"A0", ...{type:"mc", en:"'The house'", stem:"___ huis", choices:["het","de","een","dat"], answer:"het"}},
+  {level:"A1", ...{type:"type", en:"Tomorrow I work. (start: Morgen)", ok:["morgen werk ik"]}},
+  {level:"A2", ...{type:"type", en:"I cycled to school. (perfect, destination)", ok:["ik ben naar school gefietst"]}},
+  {level:"B1", ...{type:"mc", en:"Participle of 'schrijven'.", stem:"ik heb ___", choices:["geschreven","geschrijven","geschrijfd","schreef"], answer:"geschreven"}},
+  {level:"B2", ...{type:"type", en:"I'm happy with it. (er + adjective)", ok:["ik ben er blij mee"]}}
+];
+
+/* =========================================================================
+   STORAGE
+========================================================================= */
+const KEY="nl_curric_v1"; let mem=null;
+function canLS(){try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true;}catch(e){return false;}}
+const HAS_LS=canLS();
+function load(){if(HAS_LS){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null;}catch(e){}}return mem;}
+function save(s){if(HAS_LS){try{localStorage.setItem(KEY,JSON.stringify(s));return;}catch(e){}}mem=s;}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function dayNum(){return Math.floor(Date.now()/86400000);}
+function freshState(){
+  const unit={}; UNITS.forEach((u,i)=>unit[u.id]={status:i===0?"active":"locked",mastery:0});
+  return {unit, placed:false, cards:{}, dayStreak:0, lastDay:null, reviews:0, right:0, mistakes:[]};
+}
+let S=load()||freshState();
+if(!S.mistakes) S.mistakes=[]; // migrate older saved state
+(function(){const t=today();if(S.lastDay!==t){if(S.lastDay){const gap=Math.round((new Date(t)-new Date(S.lastDay))/86400000);S.dayStreak=gap===1?S.dayStreak+1:1;}else S.dayStreak=1;S.lastDay=t;save(S);}})();
+
+/* --- Mistakes collection (lapse box) ---
+   Each entry: {en, ok:[...], rule, trap, src:"gen"|"ai", added, misses}
+   Keyed by the exact prompt+answer so the SAME sentence returns, deduped. */
+function mistakeKey(it){ return (it.en||"")+"||"+((it.ok&&it.ok[0])||""); }
+function addMistake(it, src){
+  const key=mistakeKey(it);
+  const existing=S.mistakes.find(m=>mistakeKey(m)===key);
+  if(existing){ existing.misses=(existing.misses||1)+1; }
+  else { S.mistakes.push({en:it.en, ok:it.ok, rule:it.rule, trap:it.trap||null, src, added:Date.now(), misses:1}); }
+  save(S);
+}
+function removeMistake(it){
+  const key=mistakeKey(it);
+  const i=S.mistakes.findIndex(m=>mistakeKey(m)===key);
+  if(i>-1){ S.mistakes.splice(i,1); save(S); }
+}
+function bumpMistake(it){ // got it wrong again in review: keep it, reset recency
+  const key=mistakeKey(it);
+  const m=S.mistakes.find(x=>mistakeKey(x)===key);
+  if(m){ m.misses=(m.misses||1)+1; m.added=Date.now(); save(S); }
+}
+
+/* SM-2 lite for review scheduling of learned exercises */
+function cardKey(uid,i){return uid+":"+i;}
+function ensureCard(k){if(!S.cards[k])S.cards[k]={ef:2.5,reps:0,interval:0,due:0};return S.cards[k];}
+function grade(c,ok){const q=ok?5:2;if(q<3){c.reps=0;c.interval=1;}else{c.reps++;c.interval=c.reps===1?1:c.reps===2?6:Math.round(c.interval*c.ef);c.ef=Math.max(1.3,c.ef+(0.1-(5-q)*(0.08+(5-q)*0.02)));}c.due=dayNum()+c.interval;}
+
+/* =========================================================================
+   NAV
+========================================================================= */
+const view=document.getElementById("view");
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  const t=b.dataset.tab; if(t==="learn")learn();else if(t==="review")review();else if(t==="gen")gen();else if(t==="mistakes")mistakes();else if(t==="drill")drill();else data();
+});
+function setTab(name){document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab===name));}
+
+/* =========================================================================
+   LEARN (skill tree) + placement
+========================================================================= */
+function learn(){
+  document.getElementById("dstreak").textContent=S.dayStreak;
+  let html="";
+  if(!S.placed){
+    html+=`<div class="banner">
+      <div class="lead">Welkom</div>
+      <div class="big">Let's find your level</div>
+      <p>A quick placement test — five questions climbing from absolute basics to B2. You'll unlock at the first thing you can't do, and everything below it is marked as known (still there to review, never blocking).</p>
+      <button class="cta" id="place">Take the placement test</button>
+      <button class="cta ghost" id="skipplace" style="margin-top:9px">Skip — start from A0</button>
+    </div>`;
+  }
+  LEVELS.forEach(L=>{
+    html+=`<div class="level"><div class="level-head"><span class="level-badge">${L.code}</span><span class="level-note">${L.note}</span><span class="level-line"></span></div><div class="units">`;
+    L.units.forEach(u=>{
+      const st=S.unit[u.id];
+      const cls=st.status==="locked"?"locked":st.status==="done"?"done":"active";
+      const dot=st.status==="done"?"✓":st.status==="locked"?"":"›";
+      const lock=st.status==="locked"?`<span class="u-lock">🔒</span>`:"";
+      const meta=st.status==="done"?`${Math.round(st.mastery*100)}%`:st.status==="active"?"start":"";
+      html+=`<div class="unit ${cls}" data-u="${u.id}">
+        <div class="u-dot">${dot}</div>
+        <div class="u-body"><div class="u-title">${u.title}</div><div class="u-sub">${u.sub}</div>
+          ${st.mastery>0?`<div class="mastery"><i style="width:${Math.round(st.mastery*100)}%"></i></div>`:""}
+        </div>
+        <div class="u-meta">${meta}</div>${lock}</div>`;
+    });
+    html+=`</div></div>`;
+  });
+  view.innerHTML=html;
+  if(!S.placed){
+    document.getElementById("place").onclick=startPlacement;
+    document.getElementById("skipplace").onclick=()=>{S.placed=true;save(S);learn();};
+  }
+  document.querySelectorAll(".unit").forEach(el=>{
+    el.onclick=()=>{const u=el.dataset.u; if(S.unit[u].status==="locked")return; openUnit(u);};
+  });
+}
+
+/* placement runner */
+let pPos=0, pLanding=null;
+function startPlacement(){pPos=0;pLanding=null;renderPlacement();}
+function renderPlacement(){
+  if(pPos>=PLACEMENT.length){return finishPlacement(PLACEMENT.length);} // passed everything
+  const it=PLACEMENT[pPos];
+  view.innerHTML=`<div class="card ex-wrap">
+    <div class="eyebrow"><span>Placement ${pPos+1}/${PLACEMENT.length}</span><span class="kind">${it.level} probe</span></div>
+    <div class="progressbar"><i style="width:${Math.round(100*pPos/PLACEMENT.length)}%"></i></div>
+    ${renderExerciseBody(it)}
+    <div class="row"><button class="act" id="go">Check</button><button class="ghost" id="dk">Don't know</button></div>
+    <div id="verdict"></div></div>`;
+  wireExercise(it,(correct)=>{
+    if(!correct){ // land here
+      return finishPlacement(pPos);
+    }
+    // passed this probe → advance after a beat
+    const v=document.getElementById("verdict");
+    v.className="verdict good";v.innerHTML=`<h3>Goed — level up</h3><div class="muted">You know ${it.level}. Next probe…</div>`;
+    document.getElementById("go").textContent="Continue";
+    document.getElementById("go").onclick=()=>{pPos++;renderPlacement();};
+    document.getElementById("dk").style.display="none";
+  }, ()=>finishPlacement(pPos));
+}
+function finishPlacement(landIdx){
+  // landIdx = index into LEVELS of first failed probe (or LEVELS.length if passed all)
+  const landedLevel = landIdx>=LEVELS.length ? null : LEVELS[landIdx].code;
+  // mark all units in levels below landIdx as done; open the first unit of landing level
+  let firstActive=null;
+  LEVELS.forEach((L,li)=>{
+    L.units.forEach(u=>{
+      if(li<landIdx){ S.unit[u.id]={status:"done",mastery:Math.max(S.unit[u.id].mastery,0.7)}; }
+      else if(li===landIdx && firstActive===null){ S.unit[u.id]={status:"active",mastery:0}; firstActive=u.id; }
+      else { S.unit[u.id]={status:"locked",mastery:0}; }
+    });
+  });
+  if(landIdx>=LEVELS.length){ // passed everything — unlock all, active last
+    UNITS.forEach(u=>S.unit[u.id]={status:"done",mastery:0.7});
+  }
+  S.placed=true; save(S);
+  view.innerHTML=`<div class="banner center">
+    <div class="lead">Placed</div>
+    <div class="big">${landedLevel?("You're starting at "+landedLevel):"You cleared every probe"}</div>
+    <p>${landedLevel?("Everything below "+landedLevel+" is marked as known and open for review. Your first lesson is ready."):"Impressive — the whole tree is unlocked for review. Jump into the B2 units, that's where the exam-level work is."}</p>
+    <button class="cta" id="tolearn">See my tree</button></div>`;
+  document.getElementById("tolearn").onclick=learn;
+}
+
+/* =========================================================================
+   UNIT: lesson → exercises → mastery
+========================================================================= */
+let uState=null;
+function openUnit(uid){
+  const u=UNITS[UNIT_INDEX[uid]];
+  view.innerHTML=`<div class="card lesson">
+    <div class="lvl">${u.level} · lesson</div>
+    <h2>${u.title}</h2>
+    <div class="teach">${u.lesson}</div>
+    <div class="row"><button class="cta small" id="begin">Practise this →</button>
+    <button class="ghost" id="back">Back</button></div>
+  </div>`;
+  document.getElementById("back").onclick=learn;
+  document.getElementById("begin").onclick=()=>startUnitExercises(uid);
+}
+function startUnitExercises(uid){
+  const u=UNITS[UNIT_INDEX[uid]];
+  uState={uid, list:u.ex.map((e,i)=>({...e,_i:i})), pos:0, correct:0, awaiting:false, picked:null};
+  renderUnitCard();
+}
+function renderUnitCard(){
+  const u=UNITS[UNIT_INDEX[uState.uid]];
+  if(uState.pos>=uState.list.length)return finishUnit();
+  const it=uState.list[uState.pos]; uState.awaiting=false; uState.picked=null;
+  view.innerHTML=`<div class="card ex-wrap">
+    <div class="eyebrow"><span>${u.title} · ${uState.pos+1}/${uState.list.length}</span><span class="kind">${it.type==="type"?"write":it.type==="gap"?"fill gap":"choose"}</span></div>
+    <div class="progressbar"><i style="width:${Math.round(100*uState.pos/uState.list.length)}%"></i></div>
+    ${renderExerciseBody(it)}
+    <div class="row"><button class="act" id="go">Check</button><button class="ghost" id="dk">Don't know</button></div>
+    <div id="verdict"></div></div>`;
+  wireExercise(it,(correct)=>{
+    // per-card SR
+    const k=cardKey(uState.uid,it._i); grade(ensureCard(k),correct);
+    S.reviews++; if(correct){S.right++; uState.correct++;} else uState.list.push(it);
+    save(S);
+    showVerdict(it,correct,()=>{uState.pos++;renderUnitCard();});
+  },()=>{ // skip
+    const k=cardKey(uState.uid,it._i); grade(ensureCard(k),false); S.reviews++; uState.list.push(it); save(S);
+    showVerdict(it,false,()=>{uState.pos++;renderUnitCard();},true);
+  });
+}
+function finishUnit(){
+  const u=UNITS[UNIT_INDEX[uState.uid]];
+  const denom=u.ex.length; const score=uState.correct/denom;
+  const st=S.unit[uState.uid];
+  st.mastery=Math.max(st.mastery, Math.min(1, uState.correct/denom));
+  const passed=score>=0.8; // need 80% first-pass-equivalent
+  let unlockedMsg="";
+  if(passed){
+    st.status="done";
+    // unlock next locked unit
+    const idx=UNIT_INDEX[uState.uid];
+    for(let j=idx+1;j<UNITS.length;j++){ if(S.unit[UNITS[j].id].status==="locked"){S.unit[UNITS[j].id].status="active"; unlockedMsg=`Unlocked: <b>${UNITS[j].title}</b>`; break;} }
+  }
+  save(S);
+  view.innerHTML=`<div class="banner center">
+    <div class="lead">${passed?"Voltooid":"Bijna"}</div>
+    <div class="big-num">${Math.round(score*100)}%</div>
+    <div class="big" style="font-size:18px;margin-top:8px">${passed?"Unit complete":"Not quite mastered yet"}</div>
+    <p>${passed? (unlockedMsg||"You've reached the end of the current tree."): "You need 80% to unlock the next unit. The ones you missed were added back — try the unit again."}</p>
+    <button class="cta" id="tolearn">Back to tree</button>
+    ${passed?"":`<button class="cta ghost" id="retry" style="margin-top:9px">Retry unit</button>`}
+  </div>`;
+  document.getElementById("tolearn").onclick=learn;
+  if(!passed)document.getElementById("retry").onclick=()=>startUnitExercises(uState.uid);
+}
+
+/* =========================================================================
+   SHARED EXERCISE RENDER + WIRE
+========================================================================= */
+function renderExerciseBody(it){
+  if(it.type==="type"){
+    return `<div class="prompt">${it.en}</div><div class="subhint">${it.hint||""}</div>
+      <label class="sr" for="ans">Type the Dutch</label>
+      <input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type it out…">`;
+  } else if(it.type==="gap"){
+    return `<div class="prompt">${it.en}</div><div class="gapline">${it.template.replace(/___/g,'<span class="slot">____</span>')}</div>
+      <label class="sr" for="ans">Fill the gap</label>
+      <input type="text" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="missing word(s)…">`;
+  } else {
+    const opts=shuffle(it.choices.slice());
+    return `<div class="prompt">${it.en}</div><div class="gapline">${it.stem.replace("___",'<span class="slot">____</span>')}</div>
+      <div class="choices" id="choices">${opts.map(o=>`<button class="choice" data-v="${o}">${o}</button>`).join("")}</div>`;
+  }
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return (s||"").toLowerCase().replace(/[.,!?;:'"’]/g,"").replace(/\s+/g," ").trim();}
+
+function wireExercise(it,onResult,onSkip){
+  if(it.type==="mc"){
+    document.querySelectorAll(".choice").forEach(c=>c.onclick=()=>{
+      if(uStateAwaiting())return;
+      document.querySelectorAll(".choice").forEach(x=>x.classList.remove("picked"));
+      c.classList.add("picked"); pickedVal=c.dataset.v;
+    });
+  } else {
+    const inp=document.getElementById("ans"); if(inp){inp.focus();inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();doCheck();}};}
+  }
+  pickedVal=null; resultCb=onResult; skipCb=onSkip; curItem=it;
+  document.getElementById("go").onclick=doCheck;
+  document.getElementById("dk").onclick=()=>{ if(skipCb)skipCb(); };
+}
+let pickedVal=null, resultCb=null, skipCb=null, curItem=null, _awaiting=false;
+function uStateAwaiting(){return _awaiting;}
+function doCheck(){
+  const it=curItem; let correct=false, user="";
+  if(it.type==="mc"){ if(!pickedVal)return; user=pickedVal; correct=pickedVal===it.answer;
+    document.querySelectorAll(".choice").forEach(c=>{if(c.dataset.v===it.answer)c.classList.add("right");else if(c.dataset.v===pickedVal)c.classList.add("wrong");c.style.pointerEvents="none";});
+  } else { const inp=document.getElementById("ans"); user=inp.value; correct=it.ok.some(a=>norm(a)===norm(user)); inp.disabled=true; }
+  lastUser=user; _awaiting=true;
+  if(resultCb)resultCb(correct);
+}
+let lastUser="";
+function showVerdict(it,correct,onNext,skipped){
+  const model = it.type==="mc"?it.answer : it.ok[0];
+  let diag=""; if(!correct&&!skipped&&it.traps){for(const[re,msg]of it.traps){if(re.test(norm(lastUser))){diag=msg;break;}}}
+  const v=document.getElementById("verdict");
+  v.className="verdict "+(correct?"good":"bad");
+  v.innerHTML=correct
+    ? `<h3>Goed</h3><div class="answer"><span class="fix">${model}</span></div>${it.rule?`<div class="rulebox">${it.rule}</div>`:""}`
+    : `<h3>${skipped?"Here it is":"Niet goed"}</h3>
+       ${(!skipped&&it.type!=="mc")?`<div class="answer">${diffMarkup(lastUser,model)}</div>`:""}
+       <div class="answer"><span class="fix">${model}</span></div>
+       ${diag?`<div class="diag">${diag}</div>`:""}${it.rule?`<div class="rulebox">${it.rule}</div>`:""}`;
+  const go=document.getElementById("go"); go.textContent="Next"; go.onclick=()=>{_awaiting=false;onNext();};
+  document.getElementById("dk").style.display="none";
+  go.focus();
+}
+function diffMarkup(user,correct){const cw=norm(correct).split(" ");const uw=norm(user).split(" ").filter(Boolean);const pool=[...cw];return uw.map(w=>{const i=pool.indexOf(w);if(i>-1){pool.splice(i,1);return w;}return `<span class="bad-tok">${w}</span>`;}).join(" ")||"<i>(blank)</i>";}
+
+/* Copy-and-correct: after a wrong answer, the learner must RETYPE the correct
+   answer before advancing. Returns HTML; call wireRepro() to activate it.
+   goBtn is the Next button element to gate; answer is the correct string. */
+function reproHTML(){
+  return `<div class="repro" id="repro">
+    <div class="lbl">Now type it correctly to continue — <b>build the muscle memory</b>:</div>
+    <input type="text" id="reproin" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="retype the correct sentence…">
+    <div class="hint" id="reprohint"></div>
+  </div>`;
+}
+function wireRepro(answer, goBtn, onDone){
+  const inp=document.getElementById("reproin");
+  const hint=document.getElementById("reprohint");
+  if(!inp){ if(onDone)onDone(); return; }
+  goBtn.disabled=true; goBtn.style.opacity="0.4"; goBtn.style.cursor="default";
+  inp.focus();
+  const target=norm(answer);
+  const check=(advance)=>{
+    const now=norm(inp.value);
+    if(now===target){
+      inp.classList.add("matched");
+      hint.className="hint ok"; hint.textContent="✓ correct — press Enter or Next";
+      goBtn.disabled=false; goBtn.style.opacity="1"; goBtn.style.cursor="pointer";
+      if(advance && onDone) onDone();
+      return true;
+    } else {
+      inp.classList.remove("matched");
+      goBtn.disabled=true; goBtn.style.opacity="0.4"; goBtn.style.cursor="default";
+      // gentle progress hint: how many leading words match
+      const tw=target.split(" "), nw=now.split(" ");
+      let good=0; while(good<nw.length && good<tw.length && nw[good]===tw[good]) good++;
+      hint.className="hint";
+      hint.textContent = now.length? `${good}/${tw.length} words match so far` : "";
+      return false;
+    }
+  };
+  inp.oninput=()=>check(false);
+  inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); if(check(false)){ goBtn.click(); } } };
+}
+
+/* =========================================================================
+   REVIEW — due cards across everything learned
+========================================================================= */
+function review(){
+  const d=dayNum();
+  const due=[];
+  UNITS.forEach(u=>{ if(S.unit[u.id].status==="locked")return;
+    u.ex.forEach((e,i)=>{const k=cardKey(u.id,i);const c=S.cards[k];if(c&&c.due<=d)due.push({...e,_uid:u.id,_i:i});});
+  });
+  if(!due.length){
+    view.innerHTML=`<div class="banner center"><div class="lead">Review</div><div class="big">Nothing due right now</div><p>Cards you've practised come back here on a spaced schedule — miss one and it returns tomorrow, nail it repeatedly and it drifts out to weeks. Learn a unit or two first and they'll start flowing in.</p><button class="cta" id="go">Go learn</button></div>`;
+    document.getElementById("go").onclick=()=>{setTab("learn");learn();};return;
+  }
+  revList=shuffle(due); revPos=0; renderReview();
+}
+let revList=[],revPos=0;
+function renderReview(){
+  if(revPos>=revList.length){view.innerHTML=`<div class="banner center"><div class="lead">Klaar</div><div class="big">Review done</div><p>Everything rescheduled. Kom morgen terug.</p><button class="cta" id="go">Back to tree</button></div>`;document.getElementById("go").onclick=()=>{setTab("learn");learn();};return;}
+  const it=revList[revPos];
+  view.innerHTML=`<div class="card ex-wrap">
+    <div class="eyebrow"><span>Review ${revPos+1}/${revList.length}</span><span class="kind">${it.type}</span></div>
+    <div class="progressbar"><i style="width:${Math.round(100*revPos/revList.length)}%"></i></div>
+    ${renderExerciseBody(it)}
+    <div class="row"><button class="act" id="go">Check</button><button class="ghost" id="dk">Don't know</button></div>
+    <div id="verdict"></div></div>`;
+  wireExercise(it,(correct)=>{const k=cardKey(it._uid,it._i);grade(ensureCard(k),correct);S.reviews++;if(correct)S.right++;else revList.push(it);save(S);showVerdict(it,correct,()=>{revPos++;renderReview();});},
+  ()=>{const k=cardKey(it._uid,it._i);grade(ensureCard(k),false);revList.push(it);save(S);showVerdict(it,false,()=>{revPos++;renderReview();},true);});
+}
+
+/* =========================================================================
+   DATA
+========================================================================= */
+function data(){
+  const learned=UNITS.filter(u=>S.unit[u.id].status!=="locked").length;
+  const done=UNITS.filter(u=>S.unit[u.id].status==="done").length;
+  const acc=S.reviews?Math.round(100*S.right/S.reviews):0;
+  view.innerHTML=`<div class="card set">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+      <div><div class="big-num" style="font-size:26px">${done}</div><div class="note">units mastered</div></div>
+      <div><div class="big-num" style="font-size:26px">${learned}/${UNITS.length}</div><div class="note">units open</div></div>
+      <div><div class="big-num" style="font-size:26px">${acc}%</div><div class="note">accuracy</div></div>
+    </div>
+    <h2 style="font-family:Fraunces,serif;font-size:14px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:10px">Your data</h2>
+    <p>${HAS_LS?"Progress saves automatically in this browser.":"<b>Preview mode:</b> progress is in memory only — export before closing."} Use export/import to move between devices.</p>
+    <div class="row" style="margin-top:0"><button class="act" id="exp">Export</button><button class="ghost" id="impb">Import</button></div>
+    <textarea id="io" placeholder="Export appears here; paste an export and click Import to restore." style="margin-top:12px"></textarea>
+    <div class="row" style="margin-top:16px"><button class="ghost danger" id="reset">Reset everything</button></div>
+  </div>`;
+  document.getElementById("exp").onclick=()=>{document.getElementById("io").value=btoa(unescape(encodeURIComponent(JSON.stringify(S))));};
+  document.getElementById("impb").onclick=()=>{try{S=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("io").value.trim()))));save(S);alert("Restored.");setTab("learn");learn();}catch(e){alert("Invalid export.");}};
+  document.getElementById("reset").onclick=()=>{if(confirm("Wipe everything?")){S=freshState();save(S);setTab("learn");learn();}};
+}
+
+/* =========================================================================
+   DRILL ∞  — OpenRouter-powered infinite practice
+   - key + model kept in memory for the session only (never saved to disk)
+   - you pick the topic; type the full sentence; explanation after each answer
+========================================================================= */
+const DRILL_TOPICS=[
+  "hebben vs zijn in the perfect tense (with movement verbs and destinations)",
+  "separable verbs (opbellen, meenemen) in main clauses, participles, and with te",
+  "the five jobs of er (especially er + adjective + preposition)",
+  "strong verb participles (schrijven, drinken, nemen, lezen)",
+  "adjective endings (-e or not)",
+  "word order: inversion and subordinate clauses (omdat, dat, terwijl)",
+  "perfect vs imperfect for narration",
+  "de/het articles and plurals",
+  "modal verbs (kunnen, moeten, willen, mogen)",
+  "the passive with worden"
+];
+// session-only credentials (NOT persisted)
+let OR_KEY=null, OR_MODEL="x-ai/grok-latest";
+let drillTopic=null, drillRecent=[], drillItem=null, drillBusy=false, drillStats={n:0,ok:0};
+
+function drill(){
+  if(!OR_KEY){ return drillSetup(); }
+  if(!drillTopic){ return drillPickTopic(); }
+  return drillLoop();
+}
+
+function drillSetup(){
+  view.innerHTML=`<div class="card set">
+    <h2 style="font-family:Fraunces,serif;font-size:22px;font-weight:600;margin-bottom:4px">Drill ∞</h2>
+    <p style="margin-bottom:16px">Infinite AI-generated practice on whatever's breaking. Pick a topic, type the full sentence, get an explanation after each one. This is the volume that turns “I know it” into “I don't have to think about it.”</p>
+    <div class="box" style="background:var(--card2);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;color:var(--ink-soft)">
+      <b style="color:var(--ink)">Your OpenRouter key stays in this browser tab only.</b> It is never saved to the page, a file, or a server — close the tab and it's gone. Use a <b style="color:var(--ink)">prepaid key with a spending cap</b>, not your main key.
+    </div>
+    <label class="sr" for="orkey">OpenRouter API key</label>
+    <input type="text" id="orkey" placeholder="sk-or-..." autocomplete="off" spellcheck="false" style="margin-bottom:10px">
+    <label class="sr" for="ormodel">Model</label>
+    <select id="ormodel" spellcheck="false" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:14px;padding:12px 14px;border:1px solid var(--rule);border-radius:5px;background:#0d0b09;color:var(--ink);margin-bottom:6px">
+      <optgroup label="xAI — works without the data-policy toggle">
+        <option value="x-ai/grok-latest">x-ai/grok-latest (always newest Grok)</option>
+        <option value="x-ai/grok-4.5">x-ai/grok-4.5</option>
+        <option value="x-ai/grok-4.3">x-ai/grok-4.3 (cheaper)</option>
+        <option value="x-ai/grok-4.20">x-ai/grok-4.20</option>
+      </optgroup>
+      <optgroup label="Need data-policy toggle ON in OpenRouter settings">
+        <option value="google/gemini-flash-latest">google/gemini-flash-latest</option>
+        <option value="openai/gpt-4o-mini">openai/gpt-4o-mini</option>
+        <option value="anthropic/claude-3.5-sonnet">anthropic/claude-3.5-sonnet</option>
+      </optgroup>
+      <option value="__custom">Custom — type my own…</option>
+    </select>
+    <input type="text" id="ormodel_custom" placeholder="e.g. provider/model-name" spellcheck="false" style="display:none;margin-bottom:6px">
+    <p class="note">Default is <em>grok-latest</em> — it works on your account and auto-updates so the id never goes stale. The Google/OpenAI/Anthropic models need the <b>prompt-logging / data-policy toggle turned ON</b> in your OpenRouter privacy settings; without it they return a “terms of service” error. Grok doesn't need that.</p>
+    <div class="row"><button class="act" id="save">Start drilling</button></div>
+  </div>`;
+  const sel=document.getElementById("ormodel");
+  const custom=document.getElementById("ormodel_custom");
+  sel.value=OR_MODEL; // reflect current default in the dropdown
+  sel.onchange=()=>{ custom.style.display = sel.value==="__custom" ? "block" : "none"; if(sel.value==="__custom")custom.focus(); };
+  document.getElementById("save").onclick=()=>{
+    const k=document.getElementById("orkey").value.trim();
+    if(!k){alert("Paste a key to continue.");return;}
+    OR_KEY=k;
+    let m = sel.value==="__custom" ? custom.value.trim() : sel.value;
+    if(m) OR_MODEL=m;
+    drillPickTopic();
+  };
+}
+
+function drillPickTopic(){
+  view.innerHTML=`<div class="card">
+    <h2 style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:14px">What do you want to drill?</h2>
+    <div class="choices" id="topics">
+      ${DRILL_TOPICS.map((t,i)=>`<button class="choice" data-i="${i}" style="font-family:'Public Sans',sans-serif">${t}</button>`).join("")}
+    </div>
+    <div class="row"><button class="ghost" id="back">Change key / model</button></div>
+  </div>`;
+  document.getElementById("back").onclick=()=>{OR_KEY=null;drillSetup();};
+  document.querySelectorAll("#topics .choice").forEach(b=>b.onclick=()=>{
+    drillTopic=DRILL_TOPICS[+b.dataset.i]; drillRecent=[]; drillStats={n:0,ok:0}; drillLoop();
+  });
+}
+
+async function drillLoop(){
+  // header + shell
+  const acc=drillStats.n?Math.round(100*drillStats.ok/drillStats.n):0;
+  view.innerHTML=`<div class="card ex-wrap">
+    <div class="eyebrow"><span>Drill ∞ · ${drillStats.n} done · ${acc}%</span><span class="kind">AI · type</span></div>
+    <div id="genzone"><div class="center" style="padding:26px 0;color:var(--ink-soft)"><div class="big-num" id="spin">∙∙∙</div><div class="muted" style="margin-top:8px">generating a fresh sentence…</div></div></div>
+  </div>`;
+  animateSpin();
+  try{
+    drillItem=await generateItem(drillTopic, drillRecent);
+    drillRecent.push(drillItem.en); if(drillRecent.length>8)drillRecent.shift();
+    renderDrillItem();
+  }catch(e){
+    document.getElementById("genzone").innerHTML=`<div class="verdict bad"><h3>Generation failed</h3>
+      <div class="diag">${(e&&e.message)?e.message:"Couldn't reach OpenRouter."}</div>
+      <div class="rulebox">Check the key, your OpenRouter credit balance, and the model id.</div></div>
+      <div class="row"><button class="act" id="retry">Try again</button><button class="ghost" id="chg">Change key/topic</button></div>`;
+    document.getElementById("retry").onclick=drillLoop;
+    document.getElementById("chg").onclick=()=>{drillTopic=null;drillSetup();};
+  }
+}
+let spinTimer=null;
+function animateSpin(){const el=()=>document.getElementById("spin");const frames=["∙","∙∙","∙∙∙"];let i=0;clearInterval(spinTimer);spinTimer=setInterval(()=>{const e=el();if(!e){clearInterval(spinTimer);return;}e.textContent=frames[i++%frames.length];},280);}
+
+function renderDrillItem(){
+  clearInterval(spinTimer);
+  const it=drillItem;
+  document.getElementById("genzone").innerHTML=`
+    <div class="prompt">${it.en}</div>
+    <div class="subhint">${drillTopic.split("(")[0].trim()}</div>
+    <label class="sr" for="dans">Type the Dutch</label>
+    <input type="text" id="dans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the full sentence…">
+    <div class="row"><button class="act" id="dgo">Check</button><button class="ghost" id="dskip">Don't know</button></div>
+    <div id="dverdict"></div>`;
+  const inp=document.getElementById("dans"); inp.focus();
+  inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();drillCheck(false);}};
+  document.getElementById("dgo").onclick=()=>drillCheck(false);
+  document.getElementById("dskip").onclick=()=>drillCheck(true);
+}
+
+function drillCheck(skipped){
+  const it=drillItem;
+  const user=document.getElementById("dans").value;
+  const correct=!skipped && (it.ok||[]).some(a=>norm(a)===norm(user));
+  drillStats.n++; if(correct)drillStats.ok++;
+  if(!correct) addMistake(it,"ai");
+  // feed the error-history engine too, loosely tagged by topic keyword
+  const inp=document.getElementById("dans"); inp.disabled=true;
+  let diag="";
+  if(!correct && !skipped && it.trap && it.trap.pattern){
+    if(norm(user).includes(norm(it.trap.pattern))) diag=it.trap.msg||"";
+  }
+  const v=document.getElementById("dverdict");
+  v.className="verdict "+(correct?"good":"bad");
+  v.innerHTML=correct
+    ? `<h3>Goed</h3><div class="answer"><span class="fix">${it.ok[0]}</span></div>${it.rule?`<div class="rulebox">${it.rule}</div>`:""}`
+    : `<h3>${skipped?"Here it is":"Niet goed"}</h3>
+       ${(!skipped)?`<div class="answer">${diffMarkup(user,it.ok[0])}</div>`:""}
+       <div class="answer"><span class="fix">${it.ok[0]}</span></div>
+       ${diag?`<div class="diag">${diag}</div>`:""}${it.rule?`<div class="rulebox">${it.rule}</div>`:""}${reproHTML()}`;
+  const go=document.getElementById("dgo"); go.textContent="Next →"; go.onclick=drillLoop;
+  document.getElementById("dskip").style.display="none";
+  if(correct){ go.focus(); }
+  else { wireRepro(it.ok[0], go, ()=>go.focus()); }
+}
+
+async function generateItem(topic, avoid){
+  const sys=`You are a Dutch (NT2/CEFR A2-B1) exercise generator. Produce ONE translation exercise.
+Return ONLY valid JSON — no markdown, no code fences, no prose — in exactly this shape:
+{"en":"<English sentence to translate>","ok":["<correct Dutch>","<accepted variant>"],"rule":"<one-line grammar point, under 12 words>","trap":{"pattern":"<lowercase substring likely to appear in a WRONG answer>","msg":"<one sentence: why that's wrong>"}}
+Rules: natural sentence, A2-B1 length, that genuinely tests the topic. In "ok" include all correct answers and common variants (wij/we, jij/je, mij/me). If no obvious trap, set "trap" to null.`;
+  const usr=`Topic: ${topic}
+Avoid repeating any of these recent sentences: ${(avoid&&avoid.length)?avoid.join(" | "):"(none yet)"}`;
+  const resp=await fetch("https://openrouter.ai/api/v1/chat/completions",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+OR_KEY,
+      "HTTP-Referer":location.origin||"https://localhost","X-Title":"Dutch Drill"},
+    body:JSON.stringify({model:OR_MODEL,max_tokens:400,temperature:0.8,
+      messages:[{role:"system",content:sys},{role:"user",content:usr}]})
+  });
+  if(!resp.ok){ let d="";try{const j=await resp.json();d=j.error&&j.error.message?j.error.message:JSON.stringify(j).slice(0,140);}catch(e){d="HTTP "+resp.status;} throw new Error(d); }
+  const data=await resp.json();
+  const raw=(data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||"";
+  const clean=raw.replace(/```json/gi,"").replace(/```/g,"").trim();
+  let obj; try{ obj=JSON.parse(clean); }catch(e){ throw new Error("Model returned non-JSON. Try again or switch models."); }
+  if(!obj.en || !Array.isArray(obj.ok) || !obj.ok.length) throw new Error("Model returned an incomplete exercise. Try again.");
+  return obj;
+}
+
+/* =========================================================================
+   GENERATE — offline sentence generator (no API, no key, no cost)
+   Templates + swappable vocab. Every combination is grammatically correct;
+   verified by an external self-test before shipping.
+========================================================================= */
+const G_rand=a=>a[Math.floor(Math.random()*a.length)];
+const G_cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const G_SUBJ=[
+  {en:"I",nl:"ik",v:2,ben:"ben",heb:"heb"},
+  {en:"you",nl:"jij",v:2,ben:"bent",heb:"hebt"},
+  {en:"he",nl:"hij",v:3,ben:"is",heb:"heeft"},
+  {en:"she",nl:"zij",v:3,ben:"is",heb:"heeft"},
+  {en:"we",nl:"wij",v:1,ben:"zijn",heb:"hebben"},
+];
+const G_TIME=[{en:"yesterday",nl:"gisteren"},{en:"this morning",nl:"vanochtend"},{en:"last week",nl:"vorige week"},{en:"today",nl:"vandaag"}];
+const G_PLACE=[
+  {en:"school",nl:"naar school",ento:"to school"},
+  {en:"the station",nl:"naar het station",ento:"to the station"},
+  {en:"Amsterdam",nl:"naar Amsterdam",ento:"to Amsterdam"},
+  {en:"home",nl:"naar huis",ento:"home"},
+  {en:"the city",nl:"naar de stad",ento:"to the city"},
+];
+const G_MOVE=[{en:"cycled",part:"gefietst"},{en:"walked",part:"gelopen"},{en:"drove",part:"gereden"},{en:"went",part:"gegaan"}];
+const G_ACT=[{en:"worked",part:"gewerkt"},{en:"played",part:"gespeeld"},{en:"cooked",part:"gekookt"},{en:"studied",part:"gestudeerd"}];
+const G_STRONG=[
+  {en:"written",inf:"schrijven",part:"geschreven",obj:{en:"a letter",nl:"een brief"}},
+  {en:"drunk",inf:"drinken",part:"gedronken",obj:{en:"beer",nl:"bier"}},
+  {en:"read",inf:"lezen",part:"gelezen",obj:{en:"the book",nl:"het boek"}},
+  {en:"taken",inf:"nemen",part:"genomen",obj:{en:"the train",nl:"de trein"}},
+  {en:"eaten",inf:"eten",part:"gegeten",obj:{en:"an apple",nl:"een appel"}},
+];
+const G_SEP=[
+  {en:"call",enpast:"called",pre:"op",sg1:"bel",sg:"belt",pl:"bellen",part:"opgebeld",obj:{en:"my mother",nl:"mijn moeder"}},
+  {en:"tidy",enpast:"tidied",pre:"op",sg1:"ruim",sg:"ruimt",pl:"ruimen",part:"opgeruimd",obj:{en:"the room",nl:"de kamer"}},
+  {en:"invite",enpast:"invited",pre:"uit",sg1:"nodig",sg:"nodigt",pl:"nodigen",part:"uitgenodigd",obj:{en:"a friend",nl:"een vriend"}},
+];
+const G_ERADJ=[
+  {en:"happy",nl:"blij",ermee:"mee",enprep:"with"},
+  {en:"afraid",nl:"bang",ermee:"voor",enprep:"of"},
+  {en:"proud",nl:"trots",ermee:"op",enprep:"of"},
+  {en:"satisfied",nl:"tevreden",ermee:"over",enprep:"with"},
+];
+const G_NOUNS=[{en:"house",nl:"huis",art:"het"},{en:"man",nl:"man",art:"de"},{en:"woman",nl:"vrouw",art:"de"},{en:"book",nl:"boek",art:"het"},{en:"car",nl:"auto",art:"de"}];
+const G_ADJ=[{en:"big",nl:"groot",e:"grote"},{en:"new",nl:"nieuw",e:"nieuwe"},{en:"small",nl:"klein",e:"kleine"},{en:"expensive",nl:"duur",e:"dure"}];
+
+const G_PATTERNS={
+  hebzijn_dest:{label:"hebben/zijn — with a destination", build(){
+    const s=G_rand(G_SUBJ),t=G_rand(G_TIME),p=G_rand(G_PLACE),v=G_rand(G_MOVE);
+    return {en:`${G_cap(s.en)} ${v.en} ${p.ento} ${t.en}.`,ok:[`${G_cap(s.nl)} ${s.ben} ${t.nl} ${p.nl} ${v.part}`.toLowerCase()],
+      rule:"Movement + destination → zijn.",trap:{pattern:s.heb,msg:`Destination present → use ${s.ben} (zijn), not ${s.heb}.`}};
+  }},
+  hebzijn_activity:{label:"hebben/zijn — no destination", build(){
+    const s=G_rand(G_SUBJ),t=G_rand(G_TIME),a=G_rand(G_ACT);
+    return {en:`${G_cap(s.en)} ${a.en} ${t.en}.`,ok:[`${G_cap(s.nl)} ${s.heb} ${t.nl} ${a.part}`.toLowerCase()],
+      rule:"No destination → hebben.",trap:{pattern:s.ben,msg:`No destination → use ${s.heb} (hebben), not ${s.ben}.`}};
+  }},
+  strong_part:{label:"Strong verb participles", build(){
+    const s=G_rand(G_SUBJ),st=G_rand(G_STRONG);
+    return {en:`${G_cap(s.en)} ${s.v===3?"has":"have"} ${st.en} ${st.obj.en}.`,ok:[`${G_cap(s.nl)} ${s.heb} ${st.obj.nl} ${st.part}`.toLowerCase()],
+      rule:`Strong verb: ${st.inf} → ${st.part}.`,trap:{pattern:st.inf.slice(0,4),msg:`${st.inf} is strong — the participle is ${st.part}, not a regular -t/-d form.`}};
+  }},
+  separable_main:{label:"Separable verbs — main clause", build(){
+    const s=G_rand(G_SUBJ),v=G_rand(G_SEP);
+    const conj=s.nl==="ik"?v.sg1:s.v===1?v.pl:v.sg;
+    return {en:`${G_cap(s.en)} ${s.v===3?v.en+"s":v.en} ${v.obj.en}.`,ok:[`${G_cap(s.nl)} ${conj} ${v.obj.nl} ${v.pre}`.toLowerCase()],
+      rule:"Main clause: separable prefix goes to the end.",trap:{pattern:v.pre+conj,msg:`It splits in a main clause: ${conj} … ${v.pre}.`}};
+  }},
+  separable_perfect:{label:"Separable verbs — perfect tense", build(){
+    const s=G_rand(G_SUBJ),t=G_rand(G_TIME),v=G_rand(G_SEP);
+    return {en:`${G_cap(s.en)} ${s.v===3?"has":"have"} ${v.enpast} ${v.obj.en} ${t.en}.`,ok:[`${G_cap(s.nl)} ${s.heb} ${t.nl} ${v.obj.nl} ${v.part}`.toLowerCase()],
+      rule:"Separable participle: prefix + ge + stem.",trap:{pattern:"ge"+v.pre,msg:`ge- goes in the middle: ${v.part}.`}};
+  }},
+  er_adj:{label:"er + adjective + preposition", build(){
+    const s=G_rand(G_SUBJ),a=G_rand(G_ERADJ);
+    const be=s.v===3?"is":s.v===1?"are":s.en==="I"?"am":"are";
+    return {en:`${G_cap(s.en)} ${be} ${a.en} ${a.enprep} it.`,ok:[`${G_cap(s.nl)} ${s.ben} er ${a.nl} ${a.ermee}`.toLowerCase()],
+      rule:"er + adjective → er leaps forward, preposition to the end.",trap:{pattern:"er"+a.ermee,msg:`The adjective ${a.nl} separates them: er ${a.nl} ${a.ermee}.`}};
+  }},
+  adj_ending:{label:"Adjective endings (-e or not)", build(){
+    const n=G_rand(G_NOUNS),a=G_rand(G_ADJ),def=Math.random()<0.5;
+    let art,adjForm,drop;
+    if(def){art=n.art;adjForm=a.e;drop=false;}
+    else{art="een";if(n.art==="het"){adjForm=a.nl;drop=true;}else{adjForm=a.e;drop=false;}}
+    return {en:G_cap(`${def?"the":"a"} ${a.en} ${n.en}`),ok:[`${art} ${adjForm} ${n.nl}`.toLowerCase()],
+      rule:drop?"het-word + singular + indefinite → no -e.":"Adjective takes -e here.",
+      trap:drop?{pattern:a.e,msg:`het-word, singular, indefinite → drop the -e: ${a.nl}.`}:{pattern:" "+a.nl+" ",msg:`Here the adjective needs -e: ${a.e}.`}};
+  }},
+};
+
+let genPat=null, genItem=null, genStats={n:0,ok:0};
+function gen(){ if(!genPat)return genPick(); return genLoop(); }
+function genPick(){
+  view.innerHTML=`<div class="card">
+    <h2 style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:4px">Generate — offline drill</h2>
+    <p class="muted" style="margin-bottom:16px">Endless fresh sentences, made by the app itself. No key, no cost, works offline. Pick a pattern and type the full sentence; explanation after each.</p>
+    <div class="choices" id="pats">
+      ${Object.entries(G_PATTERNS).map(([k,p])=>`<button class="choice" data-k="${k}" style="font-family:'Public Sans',sans-serif">${p.label}</button>`).join("")}
+      <button class="choice" data-k="__mix" style="font-family:'Public Sans',sans-serif">Mixed — all patterns</button>
+    </div>
+  </div>`;
+  document.querySelectorAll("#pats .choice").forEach(b=>b.onclick=()=>{genPat=b.dataset.k;genStats={n:0,ok:0};genLoop();});
+}
+function genMake(){
+  const key = genPat==="__mix" ? G_rand(Object.keys(G_PATTERNS)) : genPat;
+  return G_PATTERNS[key].build();
+}
+function genLoop(){
+  genItem=genMake();
+  const acc=genStats.n?Math.round(100*genStats.ok/genStats.n):0;
+  const label = genPat==="__mix"?"mixed":G_PATTERNS[genPat].label;
+  view.innerHTML=`<div class="card ex-wrap">
+    <div class="eyebrow"><span>Generate · ${genStats.n} done · ${acc}%</span><span class="kind">offline · type</span></div>
+    <div class="prompt">${genItem.en}</div>
+    <div class="subhint">${label}</div>
+    <label class="sr" for="gans">Type the Dutch</label>
+    <input type="text" id="gans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the full sentence…">
+    <div class="row"><button class="act" id="ggo">Check</button><button class="ghost" id="gskip">Don't know</button><button class="ghost" id="gback">Change pattern</button></div>
+    <div id="gverdict"></div>
+  </div>`;
+  const inp=document.getElementById("gans");inp.focus();
+  inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();genCheck(false);}};
+  document.getElementById("ggo").onclick=()=>genCheck(false);
+  document.getElementById("gskip").onclick=()=>genCheck(true);
+  document.getElementById("gback").onclick=()=>{genPat=null;genPick();};
+}
+function genCheck(skipped){
+  const it=genItem,user=document.getElementById("gans").value;
+  const correct=!skipped && it.ok.some(a=>norm(a)===norm(user));
+  genStats.n++; if(correct)genStats.ok++;
+  if(!correct) addMistake(it,"gen");
+  document.getElementById("gans").disabled=true;
+  let diag="";
+  if(!correct&&!skipped&&it.trap&&it.trap.pattern&&norm(user).includes(norm(it.trap.pattern)))diag=it.trap.msg;
+  const v=document.getElementById("gverdict");
+  v.className="verdict "+(correct?"good":"bad");
+  v.innerHTML=correct
+    ?`<h3>Goed</h3><div class="answer"><span class="fix">${it.ok[0]}</span></div><div class="rulebox">${it.rule}</div>`
+    :`<h3>${skipped?"Here it is":"Niet goed"}</h3>${(!skipped)?`<div class="answer">${diffMarkup(user,it.ok[0])}</div>`:""}<div class="answer"><span class="fix">${it.ok[0]}</span></div>${diag?`<div class="diag">${diag}</div>`:""}<div class="rulebox">${it.rule}</div>${reproHTML()}`;
+  const go=document.getElementById("ggo");go.textContent="Next →";go.onclick=genLoop;
+  document.getElementById("gskip").style.display="none";
+  if(correct){ go.focus(); }
+  else { wireRepro(it.ok[0], go, ()=>go.focus()); }
+}
+
+/* =========================================================================
+   MISTAKES — the lapse box. Wrong answers collect here and wait.
+   Correct on review → removed. Wrong again → stays, recency resets.
+========================================================================= */
+let mkList=[], mkPos=0;
+function mistakes(){
+  const n=S.mistakes.length;
+  if(!n){
+    view.innerHTML=`<div class="banner center">
+      <div class="lead">Mistakes</div>
+      <div class="big">Nothing here — nice</div>
+      <p>When you miss a sentence in Generate or the AI drill, it lands here and waits for you. Get it right on review and it leaves; miss it again and it stays until it sticks.</p>
+      <button class="cta" id="go">Go drill</button></div>`;
+    document.getElementById("go").onclick=()=>{setTab("gen");gen();};
+    return;
+  }
+  // group counts by source + show a couple of previews
+  const byMiss=[...S.mistakes].sort((a,b)=>(b.misses||1)-(a.misses||1));
+  const preview=byMiss.slice(0,4).map(m=>
+    `<div class="leakrow"><span class="name" style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.en}</span>
+     <span class="pct">${(m.misses||1)>1?("×"+m.misses):""}</span></div>`).join("");
+  view.innerHTML=`<div class="banner">
+      <div class="lead">Mistakes</div>
+      <div class="big"><b style="color:var(--gold)">${n}</b> ${n===1?"sentence":"sentences"} to clear</div>
+      <p>These are the exact sentences you missed. Retype each correctly to clear it. Miss it again and it stays — resets to the back of the queue.</p>
+      <button class="cta" id="start">Practise my mistakes</button>
+    </div>
+    <div class="leaks">${preview}${n>4?`<div class="leakrow"><span class="name muted">…and ${n-4} more</span><span class="pct"></span></div>`:""}</div>
+    <div class="row" style="margin-top:14px"><button class="cta ghost small" id="clear">Clear all</button></div>`;
+  document.getElementById("start").onclick=()=>{ mkList=[...S.mistakes].sort((a,b)=>a.added-b.added); mkPos=0; mkRun(); };
+  document.getElementById("clear").onclick=()=>{ if(confirm("Remove all collected mistakes?")){ S.mistakes=[]; save(S); mistakes(); } };
+}
+function mkRun(){
+  // rebuild remaining from current state each step so removals persist
+  const remaining=mkList.filter(m=>S.mistakes.some(x=>mistakeKey(x)===mistakeKey(m)));
+  if(mkPos>=remaining.length){
+    view.innerHTML=`<div class="banner center">
+      <div class="lead">Klaar</div>
+      <div class="big">${S.mistakes.length? "Round done":"All cleared! 🎉"}</div>
+      <p>${S.mistakes.length? (S.mistakes.length+" still need another pass — the ones you missed again are waiting."):"You cleared every mistake in the box. Come back after your next drill."}</p>
+      <button class="cta" id="again">${S.mistakes.length?"Go again":"Back to drilling"}</button></div>`;
+    document.getElementById("again").onclick=()=> S.mistakes.length ? (mkList=[...S.mistakes].sort((a,b)=>a.added-b.added),mkPos=0,mkRun()) : (setTab("gen"),gen());
+    return;
+  }
+  const it=remaining[mkPos];
+  const acc=`${mkPos+1} / ${remaining.length}`;
+  view.innerHTML=`<div class="card ex-wrap">
+    <div class="eyebrow"><span>Mistakes · ${acc}</span><span class="kind">${it.src==="ai"?"AI":"offline"} · ${(it.misses||1)>1?"missed ×"+it.misses:"retry"}</span></div>
+    <div class="prompt">${it.en}</div>
+    <div class="subhint">type it correctly to clear it from your list</div>
+    <label class="sr" for="mans">Type the Dutch</label>
+    <input type="text" id="mans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the full sentence…">
+    <div class="row"><button class="act" id="mgo">Check</button><button class="ghost" id="mskip">Don't know</button></div>
+    <div id="mverdict"></div>
+  </div>`;
+  const inp=document.getElementById("mans"); inp.focus();
+  inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();mkCheck(false);}};
+  document.getElementById("mgo").onclick=()=>mkCheck(false);
+  document.getElementById("mskip").onclick=()=>mkCheck(true);
+}
+function mkCheck(skipped){
+  const remaining=mkList.filter(m=>S.mistakes.some(x=>mistakeKey(x)===mistakeKey(m)));
+  const it=remaining[mkPos];
+  const user=document.getElementById("mans").value;
+  const correct=!skipped && it.ok.some(a=>norm(a)===norm(user));
+  document.getElementById("mans").disabled=true;
+  let diag="";
+  if(!correct && !skipped && it.trap && it.trap.pattern && norm(user).includes(norm(it.trap.pattern))) diag=it.trap.msg;
+  const v=document.getElementById("mverdict");
+  v.className="verdict "+(correct?"good":"bad");
+  if(correct){
+    removeMistake(it); // cleared!
+    v.innerHTML=`<h3>Goed — cleared ✓</h3><div class="answer"><span class="fix">${it.ok[0]}</span></div>${it.rule?`<div class="rulebox">${it.rule}</div>`:""}<div class="sched">removed from your mistakes</div>`;
+    const go=document.getElementById("mgo"); go.textContent="Next →"; go.onclick=()=>{mkPos++;mkRun();};
+    document.getElementById("mskip").style.display="none";
+    go.focus();
+  } else {
+    bumpMistake(it); // stays, recency reset
+    v.innerHTML=`<h3>${skipped?"Here it is":"Niet goed"} — stays in the box</h3>
+      ${(!skipped)?`<div class="answer">${diffMarkup(user,it.ok[0])}</div>`:""}
+      <div class="answer"><span class="fix">${it.ok[0]}</span></div>
+      ${diag?`<div class="diag">${diag}</div>`:""}${it.rule?`<div class="rulebox">${it.rule}</div>`:""}${reproHTML()}`;
+    const go=document.getElementById("mgo"); go.textContent="Next →"; go.onclick=()=>{mkPos++;mkRun();};
+    document.getElementById("mskip").style.display="none";
+    wireRepro(it.ok[0], go, ()=>go.focus());
+  }
+}
+
+/* boot */
+learn();
+</script>
+</body>
+</html>
