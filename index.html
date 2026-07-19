@@ -176,32 +176,65 @@ const LEVELS = [
   { code:"A0", note:"the absolute basics", units:[
     { id:"a0_thisis", title:"This is / a & the", sub:"een, de, het, dit is",
       lesson:`<p>Dutch has two words for <b>“the”</b>: <em>de</em> and <em>het</em>. There's no deep logic — you learn each noun <b>with</b> its article. Two useful anchors: <b>all plurals</b> take <em>de</em>, and <b>all diminutives</b> (words ending <em>-je</em>) take <em>het</em>.</p>
-      <p><b>“A”</b> is always <em>een</em>, for every noun.</p>
-      <div class="box"><div class="ex">de man · de vrouw · <b>het</b> huis · <b>het</b> kind</div><div class="ex">een man · een huis (a/an never changes)</div></div>
-      <p><b>“This is”</b> = <em>dit is</em>. <b>“That is”</b> = <em>dat is</em>.</p>`,
+      <p>Roughly two-thirds of nouns are <em>de</em> words; the rest are <em>het</em>. <b>“A”</b> is always <em>een</em>, for every noun, no exceptions.</p>
+      <div class="box"><div class="ex">de man · de vrouw · de tafel · <b>het</b> huis · <b>het</b> kind · <b>het</b> boek</div><div class="ex">een man · een huis (a/an never changes)</div></div>
+      <p><b>“This is”</b> = <em>dit is</em>. <b>“That is”</b> = <em>dat is</em>. These don't change for de/het: <em>dit is het huis</em>, <em>dit is de man</em>.</p>`,
       ex:[
         {type:"mc", en:"'A house' — which article?", stem:"___ huis", choices:["een","de","het","dit"], answer:"een", rule:"'A' is always een."},
         {type:"mc", en:"'The house'", stem:"___ huis", choices:["het","de","een","dat"], answer:"het", rule:"huis is a het-word."},
+        {type:"mc", en:"'The man'", stem:"___ man", choices:["de","het","een","dat"], answer:"de", rule:"man is a de-word."},
+        {type:"mc", en:"'The child'", stem:"___ kind", choices:["het","de","een","dit"], answer:"het", rule:"kind is a het-word."},
         {type:"type", en:"This is a man.", ok:["dit is een man"], rule:"dit is = this is."},
-        {type:"gap", en:"The woman (de/het?)", template:"___ vrouw", ok:["de"], rule:"vrouw is a de-word."}
+        {type:"type", en:"That is a house.", ok:["dat is een huis"], rule:"dat is = that is."},
+        {type:"gap", en:"The woman (de/het?)", template:"___ vrouw", ok:["de"], rule:"vrouw is a de-word."},
+        {type:"gap", en:"The book (de/het?)", template:"___ boek", ok:["het"], rule:"boek is a het-word."},
+        {type:"type", en:"This is the woman.", ok:["dit is de vrouw"], rule:"dit is + de/het noun."}
       ]},
     { id:"a0_ben", title:"To be: zijn", sub:"ik ben, jij bent, hij is",
       lesson:`<p>The verb <em>zijn</em> (“to be”) is irregular and you'll use it constantly. Learn all six forms cold:</p>
-      <table><tr><th>person</th><th>form</th></tr><tr><td>ik</td><td><em>ben</em></td></tr><tr><td>jij / je</td><td><em>bent</em></td></tr><tr><td>hij / zij / het</td><td><em>is</em></td></tr><tr><td>wij / we</td><td><em>zijn</em></td></tr><tr><td>jullie</td><td><em>zijn</em></td></tr><tr><td>zij (they)</td><td><em>zijn</em></td></tr></table>`,
+      <table><tr><th>person</th><th>form</th></tr><tr><td>ik</td><td><em>ben</em></td></tr><tr><td>jij / je</td><td><em>bent</em></td></tr><tr><td>hij / zij / het</td><td><em>is</em></td></tr><tr><td>wij / we</td><td><em>zijn</em></td></tr><tr><td>jullie</td><td><em>zijn</em></td></tr><tr><td>zij (they)</td><td><em>zijn</em></td></tr></table>
+      <p>Note that <em>jij</em> and <em>je</em> are the same word (je is just unstressed). Same for <em>wij/we</em> and <em>zij/ze</em>.</p>`,
       ex:[
         {type:"gap", en:"I am tired.", template:"ik ___ moe", ok:["ben"], rule:"ik ben."},
         {type:"gap", en:"You are nice. (informal)", template:"jij ___ aardig", ok:["bent"], rule:"jij bent."},
         {type:"mc", en:"He ___ big.", stem:"hij ___ groot", choices:["is","ben","bent","zijn"], answer:"is", rule:"hij is."},
-        {type:"type", en:"We are happy.", ok:["wij zijn blij","we zijn blij"], rule:"wij zijn."}
+        {type:"gap", en:"She is happy.", template:"zij ___ blij", ok:["is"], rule:"zij is."},
+        {type:"type", en:"We are happy.", ok:["wij zijn blij","we zijn blij"], rule:"wij zijn."},
+        {type:"type", en:"They are tired.", ok:["zij zijn moe","ze zijn moe"], rule:"zij zijn."},
+        {type:"mc", en:"You (plural) are here.", stem:"jullie ___ hier", choices:["zijn","bent","is","ben"], answer:"zijn", rule:"jullie zijn."},
+        {type:"gap", en:"I am a student.", template:"ik ___ student", ok:["ben"], rule:"ik ben."},
+        {type:"type", en:"He is a man.", ok:["hij is een man"], rule:"hij is + een noun."}
       ]},
     { id:"a0_plural", title:"Plurals", sub:"-en and -s",
       lesson:`<p>Most Dutch nouns pluralise with <em>-en</em>. A smaller group takes <em>-s</em> — mainly words ending in <em>-el, -er, -en, -je</em>, and most vowels.</p>
-      <div class="box"><div class="ex">boek → boek<b>en</b> · huis → huiz<b>en</b> · man → mann<b>en</b></div><div class="ex">tafel → tafel<b>s</b> · meisje → meisje<b>s</b></div></div>
-      <p>Watch the spelling shift: <em>huis → huizen</em> (s→z), <em>man → mannen</em> (double the n to keep the vowel short). That doubling rule returns everywhere.</p>`,
+      <div class="box"><div class="ex">boek → boek<b>en</b> · huis → huiz<b>en</b> · man → mann<b>en</b></div><div class="ex">tafel → tafel<b>s</b> · meisje → meisje<b>s</b> · auto → auto<b>'s</b></div></div>
+      <p>Watch the spelling shifts: <em>huis → huizen</em> (s→z), <em>man → mannen</em> (double the n to keep the vowel short), and vowel-ending words add <em>'s</em>: <em>auto → auto's</em>, <em>foto → foto's</em>. That doubling rule returns everywhere.</p>`,
       ex:[
         {type:"type", en:"Plural of 'boek'.", ok:["boeken"], rule:"-en plural."},
-        {type:"mc", en:"Plural of 'tafel'.", stem:"twee ___", choices:["tafels","tafelen","tafels","tafles"], answer:"tafels", rule:"-el words take -s."},
-        {type:"type", en:"Plural of 'man'.", ok:["mannen"], rule:"double the n: mannen."}
+        {type:"mc", en:"Plural of 'tafel'.", stem:"twee ___", choices:["tafels","tafelen","taffels","tafles"], answer:"tafels", rule:"-el words take -s."},
+        {type:"type", en:"Plural of 'man'.", ok:["mannen"], rule:"double the n: mannen."},
+        {type:"type", en:"Plural of 'huis'.", ok:["huizen"], rule:"s→z: huizen."},
+        {type:"mc", en:"Plural of 'auto'.", stem:"twee ___", choices:["auto's","autos","autoen","autoos"], answer:"auto's", rule:"vowel-ending → 's."},
+        {type:"type", en:"Plural of 'vrouw'.", ok:["vrouwen"], rule:"-en plural."},
+        {type:"mc", en:"Plural of 'meisje'.", stem:"twee ___", choices:["meisjes","meisjen","meisje's","meisjeen"], answer:"meisjes", rule:"-je diminutive → -s."},
+        {type:"type", en:"Plural of 'kind' (irregular: adds -eren).", ok:["kinderen"], rule:"kind → kinderen (irregular)."},
+        {type:"type", en:"Plural of 'appel'.", ok:["appels"], rule:"-el → -s."}
+      ]},
+    { id:"a0_numbers", title:"Numbers & telling time", sub:"één, twee, hoe laat is het",
+      lesson:`<p>Core numbers: <em>één, twee, drie, vier, vijf, zes, zeven, acht, negen, tien</em>. Then <em>elf, twaalf, dertien…</em> and <em>twintig, dertig, veertig</em>.</p>
+      <p>A quirk: from 21 onwards Dutch says the <b>unit before the ten</b>, joined by <em>en</em>: <em>eenentwintig</em> (one-and-twenty), <em>tweeëndertig</em> (two-and-thirty).</p>
+      <div class="box"><div class="ex">Hoe laat is het? — What time is it?</div><div class="ex">Het is drie uur. — It's three o'clock.</div><div class="ex">Het is half vier. — It's half past three (lit. “half four” = halfway to four!)</div></div>
+      <p>Careful: <em>half vier</em> means <b>3:30</b>, not 4:30 — Dutch counts toward the coming hour.</p>`,
+      ex:[
+        {type:"type", en:"Write 'three' in Dutch.", ok:["drie"], rule:"drie = 3."},
+        {type:"type", en:"Write 'seven' in Dutch.", ok:["zeven"], rule:"zeven = 7."},
+        {type:"mc", en:"What is 'twelve'?", stem:"___", choices:["twaalf","twalf","tweelf","twaalv"], answer:"twaalf", rule:"twaalf = 12."},
+        {type:"type", en:"Write 'twenty-one' (one word).", ok:["eenentwintig"], rule:"unit + en + ten: eenentwintig."},
+        {type:"type", en:"What time is it? (question)", ok:["hoe laat is het"], rule:"Hoe laat is het?"},
+        {type:"gap", en:"It is five o'clock.", template:"het is vijf ___", ok:["uur"], rule:"… uur = o'clock."},
+        {type:"mc", en:"'half vier' means…", stem:"half vier = ?", choices:["3:30","4:30","4:00","3:00"], answer:"3:30", rule:"Dutch counts toward the next hour: half vier = 3:30."},
+        {type:"type", en:"Write 'ten' in Dutch.", ok:["tien"], rule:"tien = 10."},
+        {type:"type", en:"Write 'eight' in Dutch.", ok:["acht"], rule:"acht = 8."}
       ]}
   ]},
 
@@ -209,130 +242,338 @@ const LEVELS = [
     { id:"a1_present", title:"Present tense", sub:"ik werk, jij werkt, hij werkt",
       lesson:`<p>Regular Dutch verbs in the present are simple. Take the <b>stem</b> (infinitive minus <em>-en</em>): <em>werken → werk</em>. Then:</p>
       <table><tr><th>person</th><th>ending</th><th>example</th></tr><tr><td>ik</td><td>stem</td><td><em>ik werk</em></td></tr><tr><td>jij / hij / zij / het</td><td>stem + <b>t</b></td><td><em>jij werkt</em></td></tr><tr><td>wij / jullie / zij</td><td>full infinitive</td><td><em>wij werken</em></td></tr></table>
-      <p>One quirk: in a question, <b>jij drops the -t</b> after the verb — <em>werk jij?</em>, not <em>werkt jij?</em></p>`,
+      <p>One quirk: in a question, <b>jij drops the -t</b> after the verb — <em>werk jij?</em>, not <em>werkt jij?</em> Also watch spelling: <em>ik woon → wij wonen</em> (one o becomes two when the syllable opens).</p>`,
       ex:[
         {type:"gap", en:"I work in Amsterdam.", template:"ik ___ in Amsterdam", ok:["werk"], rule:"ik + stem."},
         {type:"gap", en:"She drinks coffee.", template:"zij ___ koffie", ok:["drinkt"], rule:"hij/zij + stem + t."},
         {type:"type", en:"We live in Utrecht. (wonen)", ok:["wij wonen in utrecht","we wonen in utrecht"], rule:"plural = infinitive."},
-        {type:"mc", en:"Question form: do you play?", stem:"___ jij?", choices:["speel","speelt","spelen","gespeeld"], answer:"speel", rule:"jij drops -t in a question."}
+        {type:"mc", en:"Question form: do you play?", stem:"___ jij?", choices:["speel","speelt","spelen","gespeeld"], answer:"speel", rule:"jij drops -t in a question."},
+        {type:"gap", en:"He lives in Rotterdam. (wonen)", template:"hij ___ in Rotterdam", ok:["woont"], rule:"hij woont (stem+t)."},
+        {type:"type", en:"They play football. (spelen)", ok:["zij spelen voetbal","ze spelen voetbal"], rule:"plural = infinitive."},
+        {type:"gap", en:"You eat bread. (eten, informal)", template:"jij ___ brood", ok:["eet"], rule:"eten → eet, jij eet."},
+        {type:"mc", en:"'I make' (maken)", stem:"ik ___", choices:["maak","maakt","maken","gemaakt"], answer:"maak", rule:"ik + stem, no -t."},
+        {type:"type", en:"We work together. (werken, samen)", ok:["wij werken samen","we werken samen"], rule:"plural infinitive."}
+      ]},
+    { id:"a1_negation", title:"Saying no: niet & geen", sub:"the two ways to negate",
+      lesson:`<p>Dutch has <b>two</b> words for “not/no”, and picking the wrong one is a classic beginner tell.</p>
+      <p><b>geen</b> negates an <b>indefinite noun</b> — it replaces <em>een</em> or a bare plural. “not a / no / not any”:</p>
+      <div class="box"><div class="ex">Ik heb <b>een</b> auto → Ik heb <b>geen</b> auto. (I don't have a car.)</div><div class="ex">Ik drink <b>koffie</b> → Ik drink <b>geen</b> koffie.</div></div>
+      <p><b>niet</b> negates <b>everything else</b> — verbs, adjectives, definite nouns, whole sentences. It usually comes at the end, or before the word it negates:</p>
+      <div class="box"><div class="ex">Ik werk <b>niet</b>. · Het is <b>niet</b> mooi. · Ik ken de man <b>niet</b>.</div></div>
+      <p>Rule of thumb: if you could put “a” or “any” in the English, use <b>geen</b>. Otherwise <b>niet</b>.</p>`,
+      ex:[
+        {type:"mc", en:"I don't have a car.", stem:"ik heb ___ auto", choices:["geen","niet","niks","nee"], answer:"geen", rule:"indefinite noun → geen."},
+        {type:"type", en:"I don't work.", ok:["ik werk niet"], rule:"verb negation → niet."},
+        {type:"mc", en:"I drink no coffee.", stem:"ik drink ___ koffie", choices:["geen","niet","nee","niks"], answer:"geen", rule:"bare noun → geen."},
+        {type:"type", en:"It is not nice.", ok:["het is niet mooi","het is niet leuk"], rule:"adjective → niet."},
+        {type:"gap", en:"I don't have any bread.", template:"ik heb ___ brood", ok:["geen"], rule:"indefinite → geen."},
+        {type:"type", en:"I don't know the man. (kennen)", ok:["ik ken de man niet"], rule:"definite noun → niet, at the end."},
+        {type:"mc", en:"She isn't coming.", stem:"zij komt ___", choices:["niet","geen","nee","niks"], answer:"niet", rule:"verb → niet."},
+        {type:"type", en:"That is not a house.", ok:["dat is geen huis"], rule:"een → geen."},
+        {type:"gap", en:"I'm not tired.", template:"ik ben ___ moe", ok:["niet"], rule:"adjective → niet."}
       ]},
     { id:"a1_wordorder", title:"Word order: verb second", sub:"the finite verb owns slot 2",
       lesson:`<p>The single most important rule in Dutch: <b>the conjugated verb is always the second element</b> of a main clause. If something other than the subject comes first, the subject jumps to <b>after</b> the verb. This is called <b>inversie</b>.</p>
       <div class="box"><div class="ex">Ik ga morgen naar huis.</div><div class="ex">Morgen <b>ga ik</b> naar huis. ← not “Morgen ik ga”</div></div>
-      <p>Slot 1 holds exactly <b>one</b> thing. The verb is always right behind it.</p>`,
+      <p>Slot 1 holds exactly <b>one</b> thing (a word, or a whole phrase acting as one unit). The verb is always right behind it. This is why fronting a time word forces inversion — a huge share of natural Dutch sentences start this way.</p>`,
       ex:[
-        {type:"type", en:"Tomorrow I'm going home. (start: Morgen)", ok:["morgen ga ik naar huis"], traps:[[/morgen ik ga/,"Inversie: Morgen ga ik…"]], rule:"Verb in slot 2 → subject moves behind it."},
+        {type:"type", en:"Tomorrow I'm going home. (start: Morgen)", ok:["morgen ga ik naar huis"], traps:[[/morgen ik ga/,"Inversie: Morgen ga ik…"]], rule:"Verb second → subject moves behind it."},
         {type:"type", en:"Today I work. (start: Vandaag)", ok:["vandaag werk ik"], traps:[[/vandaag ik werk/,"Vandaag werk ik."]], rule:"Inversion after a fronted element."},
-        {type:"mc", en:"Which is correct?", stem:"'Now I eat.'", choices:["Nu eet ik","Nu ik eet","Ik nu eet","Nu ik eten"], answer:"Nu eet ik", rule:"Verb second."}
+        {type:"mc", en:"Which is correct?", stem:"'Now I eat.'", choices:["Nu eet ik","Nu ik eet","Ik nu eet","Nu ik eten"], answer:"Nu eet ik", rule:"Verb second."},
+        {type:"type", en:"In Amsterdam I live. (start: In Amsterdam, wonen)", ok:["in amsterdam woon ik"], traps:[[/in amsterdam ik woon/,"Inversie."]], rule:"Fronted phrase → inversion."},
+        {type:"type", en:"Tonight we cook. (start: Vanavond, koken)", ok:["vanavond koken wij","vanavond koken we"], rule:"Inversion, plural verb."},
+        {type:"mc", en:"'Then he comes.'", stem:"?", choices:["Dan komt hij","Dan hij komt","Hij dan komt","Dan hij komen"], answer:"Dan komt hij", rule:"Verb second after 'dan'."},
+        {type:"gap", en:"Tomorrow ___ she to school. (gaan)", template:"morgen ___ zij naar school", ok:["gaat"], rule:"Verb in slot 2: gaat."},
+        {type:"type", en:"Here I am. (start: Hier)", ok:["hier ben ik"], rule:"Inversion."}
+      ]},
+    { id:"a1_questions", title:"Questions", sub:"wie, wat, waar, hoe, wanneer",
+      lesson:`<p>Two ways to ask:</p>
+      <p><b>Yes/no questions</b> — put the verb <b>first</b>: <em>Werk jij?</em> (Do you work?), <em>Is het mooi?</em> (Is it nice?). Remember jij drops its -t here: <em>werk jij</em>, not <em>werkt jij</em>.</p>
+      <p><b>Open questions</b> — start with a question word, then the verb (verb still second):</p>
+      <table><tr><th>word</th><th>meaning</th></tr><tr><td><em>wie</em></td><td>who</td></tr><tr><td><em>wat</em></td><td>what</td></tr><tr><td><em>waar</em></td><td>where</td></tr><tr><td><em>wanneer</em></td><td>when</td></tr><tr><td><em>hoe</em></td><td>how</td></tr><tr><td><em>waarom</em></td><td>why</td></tr></table>`,
+      ex:[
+        {type:"type", en:"Do you work? (informal)", ok:["werk jij","werk je"], traps:[[/werkt jij/,"jij drops -t in a question: werk jij?"]], rule:"Yes/no: verb first, jij drops -t."},
+        {type:"gap", en:"Where do you live? (wonen)", template:"waar ___ jij?", ok:["woon"], rule:"waar + verb, jij drops -t."},
+        {type:"mc", en:"'What are you doing?'", stem:"___ doe jij?", choices:["Wat","Wie","Waar","Hoe"], answer:"Wat", rule:"wat = what."},
+        {type:"type", en:"Who is that? ", ok:["wie is dat"], rule:"wie = who."},
+        {type:"gap", en:"When are you coming? (komen)", template:"wanneer ___ jij?", ok:["kom"], rule:"wanneer + verb, jij drops -t."},
+        {type:"type", en:"Why are you tired? ", ok:["waarom ben jij moe","waarom ben je moe"], rule:"waarom = why."},
+        {type:"mc", en:"'How are you?'", stem:"___ gaat het?", choices:["Hoe","Wat","Wie","Waar"], answer:"Hoe", rule:"Hoe gaat het? = How's it going?"},
+        {type:"type", en:"Is it nice? ", ok:["is het mooi","is het leuk"], rule:"Yes/no: verb first."},
+        {type:"type", en:"Where is the station? (het station)", ok:["waar is het station"], rule:"waar + is."}
       ]},
     { id:"a1_hebben", title:"To have & to go", sub:"hebben, gaan",
-      lesson:`<p>Two more essential irregulars.</p>
-      <table><tr><th></th><th>hebben</th><th>gaan</th></tr><tr><td>ik</td><td><em>heb</em></td><td><em>ga</em></td></tr><tr><td>jij</td><td><em>hebt</em></td><td><em>gaat</em></td></tr><tr><td>hij/zij</td><td><em>heeft</em></td><td><em>gaat</em></td></tr><tr><td>wij/jullie/zij</td><td><em>hebben</em></td><td><em>gaan</em></td></tr></table>`,
+      lesson:`<p>Two more essential irregulars you'll lean on constantly.</p>
+      <table><tr><th></th><th>hebben</th><th>gaan</th></tr><tr><td>ik</td><td><em>heb</em></td><td><em>ga</em></td></tr><tr><td>jij</td><td><em>hebt</em></td><td><em>gaat</em></td></tr><tr><td>hij/zij</td><td><em>heeft</em></td><td><em>gaat</em></td></tr><tr><td>wij/jullie/zij</td><td><em>hebben</em></td><td><em>gaan</em></td></tr></table>
+      <p><em>hebben</em> is also how you say your age: <em>Ik heb honger</em> (I'm hungry, lit. “I have hunger”), <em>Ik heb het koud</em> (I'm cold).</p>`,
       ex:[
         {type:"mc", en:"He ___ a car.", stem:"hij ___ een auto", choices:["heeft","hebt","heb","hebben"], answer:"heeft", rule:"hij heeft."},
         {type:"gap", en:"I have a dog.", template:"ik ___ een hond", ok:["heb"], rule:"ik heb."},
-        {type:"type", en:"We go to school.", ok:["wij gaan naar school","we gaan naar school"], rule:"wij gaan."}
+        {type:"type", en:"We go to school.", ok:["wij gaan naar school","we gaan naar school"], rule:"wij gaan."},
+        {type:"gap", en:"You have a book. (informal)", template:"jij ___ een boek", ok:["hebt"], rule:"jij hebt."},
+        {type:"type", en:"She goes home.", ok:["zij gaat naar huis","ze gaat naar huis"], rule:"zij gaat."},
+        {type:"gap", en:"I'm hungry. (lit. have hunger)", template:"ik ___ honger", ok:["heb"], rule:"Ik heb honger."},
+        {type:"mc", en:"They ___ a house.", stem:"zij ___ een huis", choices:["hebben","heeft","hebt","heb"], answer:"hebben", rule:"zij hebben."},
+        {type:"type", en:"Where are you going? (informal)", ok:["waar ga jij naartoe","waar ga je naartoe","waar ga jij heen","waar ga je heen"], rule:"waar ga jij naartoe?"},
+        {type:"gap", en:"He goes to the market.", template:"hij ___ naar de markt", ok:["gaat"], rule:"hij gaat."}
+      ]},
+    { id:"a1_possessive", title:"Possessives", sub:"mijn, jouw, zijn, haar, ons",
+      lesson:`<p>“My, your, his…” — these sit before the noun and mostly don't change:</p>
+      <table><tr><th>person</th><th>possessive</th></tr><tr><td>ik</td><td><em>mijn</em> (my)</td></tr><tr><td>jij</td><td><em>jouw / je</em> (your)</td></tr><tr><td>hij</td><td><em>zijn</em> (his)</td></tr><tr><td>zij</td><td><em>haar</em> (her)</td></tr><tr><td>wij</td><td><em>ons / onze</em> (our)</td></tr><tr><td>jullie</td><td><em>jullie</em> (your)</td></tr><tr><td>zij (pl)</td><td><em>hun</em> (their)</td></tr></table>
+      <p>Only <em>ons/onze</em> changes with de/het: <b>ons</b> huis (het-word), but <b>onze</b> auto (de-word) and always <b>onze</b> before plurals.</p>`,
+      ex:[
+        {type:"gap", en:"my house", template:"___ huis", ok:["mijn"], rule:"mijn = my."},
+        {type:"gap", en:"her book", template:"___ boek", ok:["haar"], rule:"haar = her."},
+        {type:"gap", en:"his car", template:"___ auto", ok:["zijn"], rule:"zijn = his."},
+        {type:"mc", en:"our house (het huis)", stem:"___ huis", choices:["ons","onze","onzen","onz"], answer:"ons", rule:"het-word → ons."},
+        {type:"mc", en:"our car (de auto)", stem:"___ auto", choices:["onze","ons","onze'","onz"], answer:"onze", rule:"de-word → onze."},
+        {type:"type", en:"their house", ok:["hun huis"], rule:"hun = their."},
+        {type:"gap", en:"your dog (informal)", template:"___ hond", ok:["jouw","je"], rule:"jouw/je = your."},
+        {type:"type", en:"my mother", ok:["mijn moeder"], rule:"mijn = my."},
+        {type:"mc", en:"our children (plural)", stem:"___ kinderen", choices:["onze","ons","onze'","onzen"], answer:"onze", rule:"plural → always onze."}
       ]}
   ]},
 
   { code:"A2", note:"the past & richer verbs", units:[
     { id:"a2_perfect", title:"Perfect tense", sub:"ik heb gewerkt",
       lesson:`<p>The perfect is Dutch's main spoken past tense: an auxiliary (<em>hebben</em> or <em>zijn</em>) + a <b>past participle</b> at the end.</p>
-      <p>Regular participle = <em>ge-</em> + stem + <b>-t</b> or <b>-d</b>. Which ending? The <b>'t kofschip</b> rule: if the stem ends in t, k, f, s, ch, p → <b>-t</b>; otherwise → <b>-d</b>.</p>
-      <div class="box"><div class="ex">werken → <b>gewerkt</b> (k → t)</div><div class="ex">spelen → <b>gespeeld</b> (l → d)</div></div>
-      <p>The participle goes to the <b>very end</b>: <em>Ik heb gisteren hard gewerkt.</em></p>`,
+      <p>Regular participle = <em>ge-</em> + stem + <b>-t</b> or <b>-d</b>. Which ending? The <b>'t kofschip</b> rule: if the stem ends in one of the sounds in <em>'t kofschip</em> (t, k, f, s, ch, p) → <b>-t</b>; otherwise → <b>-d</b>.</p>
+      <div class="box"><div class="ex">werken → <b>gewerkt</b> (k → t)</div><div class="ex">spelen → <b>gespeeld</b> (l → d)</div><div class="ex">koken → <b>gekookt</b> (k → t)</div></div>
+      <p>The participle goes to the <b>very end</b>: <em>Ik heb gisteren hard gewerkt.</em> Judge the ending by the <b>infinitive's</b> consonant, not the devoiced stem — <em>reizen</em> has a z → <em>gereisd</em>.</p>`,
       ex:[
         {type:"type", en:"I have worked.", ok:["ik heb gewerkt"], rule:"ge + werk + t."},
         {type:"gap", en:"I have played football.", template:"ik heb voetbal ___", ok:["gespeeld"], rule:"ge + speel + d."},
-        {type:"mc", en:"Participle of 'maken'.", stem:"ik heb het ___", choices:["gemaakt","gemaakd","gemaken","maakte"], answer:"gemaakt", rule:"k → t: gemaakt."}
+        {type:"mc", en:"Participle of 'maken'.", stem:"ik heb het ___", choices:["gemaakt","gemaakd","gemaken","maakte"], answer:"gemaakt", rule:"k → t: gemaakt."},
+        {type:"type", en:"I have cooked. (koken)", ok:["ik heb gekookt"], rule:"k → t: gekookt."},
+        {type:"gap", en:"I have travelled. (reizen)", template:"ik heb ___", ok:["gereisd"], traps:[[/gereist/,"z isn't in 't kofschip → -d: gereisd."]], rule:"Judge by infinitive: reizen → gereisd."},
+        {type:"mc", en:"Participle of 'horen' (to hear).", stem:"ik heb het ___", choices:["gehoord","gehoort","gehoren","hoorde"], answer:"gehoord", rule:"r → d: gehoord."},
+        {type:"type", en:"She has learned. (leren)", ok:["zij heeft geleerd","ze heeft geleerd"], rule:"r → d: geleerd."},
+        {type:"gap", en:"We have lived here. (wonen)", template:"wij hebben hier ___", ok:["gewoond"], rule:"n → d: gewoond."},
+        {type:"type", en:"I have paid. (betalen — inseparable be-)", ok:["ik heb betaald"], traps:[[/gebetaald/,"be- is inseparable → no ge-: betaald."]], rule:"Inseparable be- → no ge-."}
       ]},
     { id:"a2_hebzijn", title:"hebben or zijn?", sub:"the auxiliary split",
-      lesson:`<p>In the perfect, most verbs take <em>hebben</em> — but verbs of <b>change of location or state</b> take <em>zijn</em>: <em>gaan, komen, worden, blijven, beginnen, stoppen</em>.</p>
+      lesson:`<p>In the perfect, most verbs take <em>hebben</em> — but verbs of <b>change of location or state</b> take <em>zijn</em>: <em>gaan, komen, worden, blijven, beginnen, stoppen, vertrekken, aankomen</em>.</p>
       <div class="box"><div class="ex">Ik <b>heb</b> gewerkt.</div><div class="ex">Ik <b>ben</b> naar huis gegaan.</div><div class="ex">Hij <b>is</b> ziek geworden.</div></div>
-      <p><b>The trap:</b> movement verbs like <em>fietsen, lopen, rijden</em> take <em>zijn</em> only when there's a <b>destination</b>. <em>Ik heb gefietst</em> (activity) vs <em>Ik ben naar school gefietst</em> (destination).</p>`,
+      <p><b>The trap:</b> movement verbs like <em>fietsen, lopen, rijden, zwemmen</em> take <em>zijn</em> only when there's a <b>destination</b>. <em>Ik heb gefietst</em> (activity) vs <em>Ik ben naar school gefietst</em> (destination). This one catches everyone repeatedly.</p>`,
       ex:[
         {type:"mc", en:"She has gone home.", stem:"zij ___ naar huis gegaan", choices:["is","heeft","hebt","was"], answer:"is", rule:"gaan → zijn."},
         {type:"type", en:"I cycled to school. (destination)", ok:["ik ben naar school gefietst"], traps:[[/heb/,"Destination → zijn."]], rule:"movement + destination → zijn."},
         {type:"type", en:"I cycled for an hour. (no destination)", ok:["ik heb een uur gefietst"], traps:[[/ben/,"No destination → hebben."]], rule:"no destination → hebben."},
-        {type:"mc", en:"He has become ill.", stem:"hij ___ ziek geworden", choices:["is","heeft","was","wordt"], answer:"is", rule:"worden → zijn."}
+        {type:"mc", en:"He has become ill.", stem:"hij ___ ziek geworden", choices:["is","heeft","was","wordt"], answer:"is", rule:"worden → zijn."},
+        {type:"type", en:"I have never been to Rotterdam. (zijn → geweest)", ok:["ik ben nooit in rotterdam geweest","ik ben nog nooit in rotterdam geweest"], traps:[[/heb/,"zijn takes zijn: ik ben … geweest."]], rule:"zijn → is/ben geweest."},
+        {type:"mc", en:"We have stayed home. (blijven)", stem:"wij ___ thuis gebleven", choices:["zijn","hebben","hebt","waren"], answer:"zijn", rule:"blijven → zijn."},
+        {type:"type", en:"He has walked to the station. (destination)", ok:["hij is naar het station gelopen"], rule:"movement + destination → zijn."},
+        {type:"type", en:"I have swum. (no destination, zwemmen)", ok:["ik heb gezwommen"], rule:"no destination → hebben."},
+        {type:"mc", en:"The film has begun. (beginnen)", stem:"de film ___ begonnen", choices:["is","heeft","was","wordt"], answer:"is", rule:"beginnen → zijn."}
+      ]},
+    { id:"a2_imperfect", title:"Imperfect tense", sub:"ik werkte, ik was",
+      lesson:`<p>The <b>imperfect</b> (simple past) is used for <b>narration, description, and background</b> — telling a story, describing how things were. In writing especially, you narrate in the imperfect.</p>
+      <p>Regular verbs: stem + <b>-te(n)</b> or <b>-de(n)</b>, following the same <em>'t kofschip</em> rule. If the stem ends in t,k,f,s,ch,p → <b>-te</b>; otherwise → <b>-de</b>:</p>
+      <div class="box"><div class="ex">werken → <b>werkte</b> / werkten</div><div class="ex">spelen → <b>speelde</b> / speelden</div></div>
+      <p>The essentials are irregular and worth memorising: <em>zijn → was/waren</em>, <em>hebben → had/hadden</em>, <em>gaan → ging</em>, <em>kunnen → kon</em>, <em>moeten → moest</em>, <em>willen → wilde</em>.</p>`,
+      ex:[
+        {type:"gap", en:"I worked yesterday. (werken, imperfect)", template:"ik ___ gisteren", ok:["werkte"], rule:"k → -te: werkte."},
+        {type:"mc", en:"'I was' (zijn, imperfect)", stem:"ik ___", choices:["was","ben","werd","waren"], answer:"was", rule:"zijn → was."},
+        {type:"gap", en:"It rained all day. (regenen)", template:"het ___ de hele dag", ok:["regende"], rule:"n → -de: regende."},
+        {type:"type", en:"I had no time. (hebben, imperfect)", ok:["ik had geen tijd"], traps:[[/heb geen tijd/,"Past narration → had, not heb."]], rule:"hebben → had."},
+        {type:"mc", en:"'We went' (gaan, imperfect)", stem:"wij ___", choices:["gingen","gaan","gingden","gaanden"], answer:"gingen", rule:"gaan → ging/gingen."},
+        {type:"gap", en:"She played outside. (spelen)", template:"zij ___ buiten", ok:["speelde"], rule:"l → -de: speelde."},
+        {type:"type", en:"I couldn't sleep. (kunnen, imperfect)", ok:["ik kon niet slapen"], rule:"kunnen → kon."},
+        {type:"type", en:"We were tired. (zijn, imperfect)", ok:["wij waren moe","we waren moe"], rule:"zijn → waren."},
+        {type:"gap", en:"He lived in Utrecht. (wonen)", template:"hij ___ in Utrecht", ok:["woonde"], rule:"n → -de: woonde."}
       ]},
     { id:"a2_separable", title:"Separable verbs", sub:"opbellen, meenemen",
-      lesson:`<p>Many Dutch verbs have a detachable prefix: <em>opbellen</em> (to phone), <em>meenemen</em> (to bring along). Where the prefix goes depends on the sentence:</p>
+      lesson:`<p>Many Dutch verbs have a detachable prefix: <em>opbellen</em> (to phone), <em>meenemen</em> (to bring along), <em>aankomen</em> (to arrive). Where the prefix goes depends on the sentence:</p>
       <table><tr><th>situation</th><th>what happens</th></tr>
       <tr><td>main clause</td><td>splits: <em>ik bel je op</em></td></tr>
       <tr><td>participle</td><td>ge- in the middle: <em>opgebeld</em></td></tr>
+      <tr><td>subordinate clause</td><td>rejoins at the end: <em>…dat ik je opbel</em></td></tr>
       <tr><td>after a modal</td><td>stays whole: <em>ik moet je opbellen</em></td></tr>
-      <tr><td>with te</td><td>te inside: <em>om je op te bellen</em></td></tr></table>`,
+      <tr><td>with te</td><td>te inside: <em>om je op te bellen</em></td></tr></table>
+      <p>Tell separable from inseparable by <b>stress</b>: <b>OP</b>bellen (stressed prefix, splits) vs be<b>TAL</b>en (stressed stem, never splits).</p>`,
       ex:[
         {type:"type", en:"I call my mother. (opbellen)", ok:["ik bel mijn moeder op"], traps:[[/opbel mijn|ik opbel/,"Main clause splits: bel … op."]], rule:"Main clause: prefix to the end."},
         {type:"type", en:"I have called him. (opbellen)", ok:["ik heb hem opgebeld"], traps:[[/geopbeld/,"ge- in the middle: opgebeld."]], rule:"Participle: prefix + ge + stem."},
-        {type:"type", en:"I have to call him.", ok:["ik moet hem opbellen"], rule:"After a modal: whole infinitive."}
+        {type:"type", en:"I have to call him.", ok:["ik moet hem opbellen"], rule:"After a modal: whole infinitive."},
+        {type:"type", en:"I think that he's arriving. (aankomen, subordinate)", ok:["ik denk dat hij aankomt"], traps:[[/aankomen/,"Subordinate: still conjugates → aankomt."]], rule:"Subordinate: rejoins, stays finite."},
+        {type:"type", en:"I'm trying to tidy up. (proberen, opruimen)", ok:["ik probeer op te ruimen"], traps:[[/te opruimen/,"te goes inside: op te ruimen."]], rule:"te splits it: op te ruimen."},
+        {type:"gap", en:"She takes the book with her. (meenemen)", template:"zij ___ het boek ___", ok:["neemt mee"], rule:"Main clause: neemt … mee."},
+        {type:"type", en:"I have brought food. (meenemen)", ok:["ik heb eten meegenomen"], traps:[[/meegenoomd|geneemd/,"Strong + separable: meegenomen."]], rule:"mee + ge + nomen."},
+        {type:"mc", en:"He gets up early. (opstaan)", stem:"hij ___ vroeg ___", choices:["staat / op","opstaat / —","staat op / —","op / staat"], answer:"staat / op", rule:"Main clause splits: staat … op."},
+        {type:"type", en:"The train arrives at eight. (aankomen)", ok:["de trein komt om acht uur aan"], rule:"Main clause: komt … aan."}
       ]},
     { id:"a2_modals", title:"Modal verbs", sub:"kunnen, moeten, willen, mogen",
-      lesson:`<p>Modals send their second verb to the end as an <b>infinitive</b>.</p>
-      <table><tr><th></th><th>ik-form</th><th>meaning</th></tr><tr><td>kunnen</td><td><em>kan</em></td><td>can</td></tr><tr><td>moeten</td><td><em>moet</em></td><td>must</td></tr><tr><td>willen</td><td><em>wil</em></td><td>want</td></tr><tr><td>mogen</td><td><em>mag</em></td><td>may</td></tr></table>
-      <div class="box"><div class="ex">Ik <b>kan</b> Nederlands <b>spreken</b>.</div></div>`,
+      lesson:`<p>Modals express ability, obligation, desire, permission — and they send their second verb to the <b>end</b> as an <b>infinitive</b>.</p>
+      <table><tr><th></th><th>ik-form</th><th>meaning</th></tr><tr><td>kunnen</td><td><em>kan</em></td><td>can / be able</td></tr><tr><td>moeten</td><td><em>moet</em></td><td>must / have to</td></tr><tr><td>willen</td><td><em>wil</em></td><td>want</td></tr><tr><td>mogen</td><td><em>mag</em></td><td>may / be allowed</td></tr><tr><td>zullen</td><td><em>zal</em></td><td>will / shall</td></tr></table>
+      <div class="box"><div class="ex">Ik <b>kan</b> Nederlands <b>spreken</b>.</div><div class="ex">Je <b>moet</b> nu <b>gaan</b>.</div></div>`,
       ex:[
         {type:"gap", en:"I can swim.", template:"ik ___ zwemmen", ok:["kan"], rule:"kunnen → kan."},
         {type:"type", en:"I want to go home.", ok:["ik wil naar huis gaan","ik wil naar huis"], rule:"willen → wil, infinitive to the end."},
-        {type:"mc", en:"You must work.", stem:"jij ___ werken", choices:["moet","moett","moeten","mag"], answer:"moet", rule:"jij moet."}
+        {type:"mc", en:"You must work.", stem:"jij ___ werken", choices:["moet","moett","moeten","mag"], answer:"moet", rule:"jij moet."},
+        {type:"gap", en:"May I sit here? (mogen)", template:"___ ik hier zitten?", ok:["mag"], rule:"mogen → mag."},
+        {type:"type", en:"We have to leave now. (moeten, weggaan)", ok:["wij moeten nu weggaan","we moeten nu weggaan"], rule:"modal + infinitive at the end."},
+        {type:"mc", en:"She can speak Dutch.", stem:"zij ___ Nederlands spreken", choices:["kan","kant","kunnen","kann"], answer:"kan", rule:"zij kan."},
+        {type:"type", en:"I want to learn Dutch. (leren)", ok:["ik wil nederlands leren"], rule:"wil + infinitive at end."},
+        {type:"gap", en:"You may go. (informal, mogen)", template:"jij ___ gaan", ok:["mag"], rule:"jij mag."},
+        {type:"type", en:"Can you help me? (kunnen, helpen, informal)", ok:["kan jij mij helpen","kan je me helpen","kun jij mij helpen","kun je me helpen"], rule:"kan/kun jij + infinitive."}
+      ]},
+    { id:"a2_reflexive", title:"Reflexive verbs", sub:"zich wassen, me voelen",
+      lesson:`<p>Some verbs take a <b>reflexive pronoun</b> — the action loops back to the subject. English often hides this (“I feel good” = Dutch “I feel <b>myself</b> good”).</p>
+      <table><tr><th>person</th><th>pronoun</th></tr><tr><td>ik</td><td><em>me / mij</em></td></tr><tr><td>jij</td><td><em>je</em></td></tr><tr><td>hij/zij</td><td><em>zich</em></td></tr><tr><td>wij</td><td><em>ons</em></td></tr><tr><td>jullie</td><td><em>je</em></td></tr><tr><td>zij (pl)</td><td><em>zich</em></td></tr></table>
+      <div class="box"><div class="ex">Ik voel <b>me</b> goed. — I feel good.</div><div class="ex">Hij wast <b>zich</b>. — He washes (himself).</div><div class="ex">Zij vergist <b>zich</b>. — She's mistaken.</div></div>`,
+      ex:[
+        {type:"gap", en:"I feel good. (zich voelen)", template:"ik voel ___ goed", ok:["me","mij"], rule:"ik → me/mij."},
+        {type:"mc", en:"He washes himself.", stem:"hij wast ___", choices:["zich","hem","zijn","je"], answer:"zich", rule:"hij → zich."},
+        {type:"gap", en:"She feels tired.", template:"zij voelt ___ moe", ok:["zich"], rule:"zij → zich."},
+        {type:"type", en:"We feel happy. (zich voelen)", ok:["wij voelen ons blij","we voelen ons blij","wij voelen ons gelukkig","we voelen ons gelukkig"], rule:"wij → ons."},
+        {type:"gap", en:"Do you feel good? (informal)", template:"voel jij ___ goed?", ok:["je"], rule:"jij → je."},
+        {type:"mc", en:"They are mistaken. (zich vergissen)", stem:"zij vergissen ___", choices:["zich","hun","ze","hen"], answer:"zich", rule:"zij (pl) → zich."},
+        {type:"type", en:"I'm mistaken. (zich vergissen)", ok:["ik vergis me","ik vergis mij"], rule:"ik → me."},
+        {type:"gap", en:"He shaves. (zich scheren)", template:"hij scheert ___", ok:["zich"], rule:"hij → zich."}
       ]}
   ]},
 
   { code:"B1", note:"strong verbs, adjectives, clauses", units:[
     { id:"b1_strong", title:"Strong verbs", sub:"vowel-change participles",
       lesson:`<p>A few hundred common verbs are <b>strong</b>: the vowel mutates and the participle ends in <b>-en</b>, not -t/-d. They fall into vowel families — learn one, get the rest.</p>
-      <table><tr><th>family</th><th>example</th></tr><tr><td>ij → ee → e</td><td><em>schrijven → geschreven</em></td></tr><tr><td>ie/ui → oo → o</td><td><em>kiezen → gekozen</em></td></tr><tr><td>i → o → o</td><td><em>drinken → gedronken</em></td></tr><tr><td>e → a → o</td><td><em>nemen → genomen</em></td></tr></table>`,
+      <table><tr><th>family</th><th>example</th></tr><tr><td>ij → ee → e</td><td><em>schrijven → schreef → geschreven</em></td></tr><tr><td>ie/ui → oo → o</td><td><em>kiezen → koos → gekozen</em></td></tr><tr><td>i → o → o</td><td><em>drinken → dronk → gedronken</em></td></tr><tr><td>e → a → o</td><td><em>nemen → nam → genomen</em></td></tr><tr><td>e → a → e</td><td><em>lezen → las → gelezen</em></td></tr></table>
+      <p>The most frequent verbs are irregular and must be memorised: <em>zijn → geweest</em>, <em>hebben → gehad</em>, <em>gaan → gegaan</em>, <em>doen → gedaan</em>, <em>zien → gezien</em>.</p>`,
       ex:[
         {type:"mc", en:"Participle of 'schrijven'.", stem:"ik heb een brief ___", choices:["geschreven","geschrijven","geschrijfd","schrijfde"], answer:"geschreven", rule:"ij → ee → e."},
         {type:"type", en:"We drank beer. (drinken)", ok:["wij hebben bier gedronken","we hebben bier gedronken"], traps:[[/gedrinkt/,"Strong: gedronken."]], rule:"i → o → o."},
-        {type:"mc", en:"Participle of 'nemen'.", stem:"ik heb het ___", choices:["genomen","genemen","genoomd","neemde"], answer:"genomen", rule:"e → a → o."}
+        {type:"mc", en:"Participle of 'nemen'.", stem:"ik heb het ___", choices:["genomen","genemen","genoomd","neemde"], answer:"genomen", rule:"e → a → o."},
+        {type:"type", en:"I have read the book. (lezen)", ok:["ik heb het boek gelezen"], traps:[[/geleesd|gelezd/,"Strong: gelezen."]], rule:"e → a → e."},
+        {type:"mc", en:"Participle of 'kiezen'.", stem:"ik heb ___", choices:["gekozen","gekiezen","gekiesd","koosde"], answer:"gekozen", rule:"ie → oo → o."},
+        {type:"type", en:"He has done that. (doen)", ok:["hij heeft dat gedaan"], rule:"doen → gedaan (irregular)."},
+        {type:"mc", en:"Participle of 'zien'.", stem:"ik heb het ___", choices:["gezien","geziend","gezeen","zag"], answer:"gezien", rule:"zien → gezien."},
+        {type:"type", en:"I have spoken with him. (spreken, met)", ok:["ik heb met hem gesproken"], traps:[[/gesprekt/,"Strong: gesproken."]], rule:"e → a → o: gesproken."},
+        {type:"type", en:"She has found the key. (vinden, de sleutel)", ok:["zij heeft de sleutel gevonden","ze heeft de sleutel gevonden"], rule:"i → o → o: gevonden."}
       ]},
     { id:"b1_adj", title:"Adjective endings", sub:"when to add -e",
       lesson:`<p>An adjective before a noun usually takes <b>-e</b>. You drop it in exactly <b>one</b> case: a <b>het-word</b> that is <b>singular</b> AND <b>indefinite</b> (een / geen / no article).</p>
-      <div class="box"><div class="ex">de grot<b>e</b> man · het grot<b>e</b> huis · grot<b>e</b> huizen</div><div class="ex">een groot huis ← all three conditions met, so bare</div></div>`,
+      <div class="box"><div class="ex">de grot<b>e</b> man · het grot<b>e</b> huis · grot<b>e</b> huizen</div><div class="ex">een groot huis ← all three conditions met, so bare</div></div>
+      <p>Watch the spelling when you add -e: <em>groot → grote</em> (one o, open syllable), <em>dik → dikke</em> (double k to keep it short). Adjectives already ending in -en never change: <em>een houten tafel</em>, <em>de open deur</em>.</p>`,
       ex:[
         {type:"mc", en:"a big house", stem:"een ___ huis", choices:["groot","grote","groote","grootte"], answer:"groot", rule:"het + singular + indefinite → no -e."},
         {type:"type", en:"the big house", ok:["het grote huis"], traps:[[/het groot huis/,"Definite → -e."]], rule:"Definite → -e."},
-        {type:"type", en:"a nice woman (mooi)", ok:["een mooie vrouw"], rule:"de-word → -e."}
+        {type:"type", en:"a nice woman (mooi)", ok:["een mooie vrouw"], rule:"de-word → -e."},
+        {type:"mc", en:"a small book (klein, het boek)", stem:"een ___ boek", choices:["klein","kleine","kleinne","klijn"], answer:"klein", rule:"het + sing + indef → no -e."},
+        {type:"type", en:"the expensive car (duur, de auto)", ok:["de dure auto"], traps:[[/duurde/,"Open syllable: dure, one u."]], rule:"de-word → -e, dure."},
+        {type:"type", en:"big houses (plural)", ok:["grote huizen"], rule:"plural → always -e."},
+        {type:"mc", en:"a new car (nieuw, de auto)", stem:"een ___ auto", choices:["nieuwe","nieuw","niewe","nieuwwe"], answer:"nieuwe", rule:"de-word → -e even when indefinite."},
+        {type:"type", en:"cold water (koud, no article)", ok:["koud water"], traps:[[/koude water/,"No article + het-word = indefinite → no -e."]], rule:"No article → indefinite → bare (het water)."},
+        {type:"type", en:"a wooden table (houten, de tafel)", ok:["een houten tafel"], rule:"-en adjectives never change."}
+      ]},
+    { id:"b1_comparative", title:"Comparatives & superlatives", sub:"groter, grootst",
+      lesson:`<p>To compare, add <b>-er</b> (more) and <b>-st</b> (most) — just like English “bigger, biggest”:</p>
+      <div class="box"><div class="ex">groot → grot<b>er</b> → grootst (big → bigger → biggest)</div><div class="ex">klein → klein<b>er</b> → kleinst</div></div>
+      <p>“Than” is <em>dan</em>: <em>Hij is groter <b>dan</b> ik.</em> A few are irregular: <em>goed → beter → best</em>, <em>veel → meer → meest</em>, <em>weinig → minder → minst</em>, <em>graag → liever → liefst</em>.</p>
+      <p>For “as … as”, use <em>net zo … als</em>: <em>Zij is net zo groot als hij.</em></p>`,
+      ex:[
+        {type:"type", en:"Comparative of 'groot' (bigger).", ok:["groter"], rule:"+ -er: groter."},
+        {type:"mc", en:"'good → better'", stem:"goed → ___", choices:["beter","goeder","beste","meer"], answer:"beter", rule:"Irregular: goed → beter."},
+        {type:"type", en:"He is bigger than I. (groot, dan)", ok:["hij is groter dan ik"], rule:"comparative + dan."},
+        {type:"gap", en:"This book is more expensive. (duur)", template:"dit boek is ___", ok:["duurder"], rule:"duur → duurder."},
+        {type:"mc", en:"'much → more'", stem:"veel → ___", choices:["meer","veler","meest","meerder"], answer:"meer", rule:"Irregular: veel → meer."},
+        {type:"type", en:"the biggest house (groot, superlative)", ok:["het grootste huis"], rule:"superlative + -e: grootste."},
+        {type:"type", en:"She is as tall as he. (net zo … als)", ok:["zij is net zo groot als hij","ze is net zo groot als hij"], rule:"net zo … als = as … as."},
+        {type:"gap", en:"I like tea more. (graag → liever)", template:"ik drink ___ thee", ok:["liever"], rule:"graag → liever."},
+        {type:"type", en:"This is the best book. (goed, superlative)", ok:["dit is het beste boek"], rule:"goed → best → beste."}
+      ]},
+    { id:"b1_conjunctions", title:"Conjunctions & word order", sub:"omdat, want, dat, als",
+      lesson:`<p>Conjunctions join clauses — but they split into two groups that do <b>opposite</b> things to word order.</p>
+      <p><b>Coordinating</b> (<em>en, maar, want, of, dus</em>) keep normal order — verb stays second:</p>
+      <div class="box"><div class="ex">Ik blijf thuis, <b>want</b> ik <b>ben</b> ziek.</div></div>
+      <p><b>Subordinating</b> (<em>omdat, dat, als, terwijl, hoewel, wanneer, sinds, zodat</em>) send the verb to the <b>end</b>:</p>
+      <div class="box"><div class="ex">Ik blijf thuis <b>omdat</b> ik ziek <b>ben</b>.</div><div class="ex">Ik weet <b>dat</b> hij morgen <b>komt</b>.</div></div>
+      <p><em>want</em> and <em>omdat</em> both mean “because” — but <em>want</em> keeps normal order, <em>omdat</em> kicks the verb to the end. That difference is a favourite exam trap.</p>`,
+      ex:[
+        {type:"type", en:"I'm staying home because I'm ill. (omdat)", ok:["ik blijf thuis omdat ik ziek ben"], traps:[[/omdat ik ben ziek/,"omdat → verb to the end: omdat ik ziek ben."]], rule:"omdat → verb to the end."},
+        {type:"type", en:"I'm staying home, because I'm ill. (want)", ok:["ik blijf thuis want ik ben ziek"], traps:[[/want ik ziek ben/,"want keeps normal order: want ik ben ziek."]], rule:"want → normal order."},
+        {type:"type", en:"I know that he's coming tomorrow. (dat, komen)", ok:["ik weet dat hij morgen komt"], traps:[[/dat hij komt morgen/,"morgen before the verb: dat hij morgen komt."]], rule:"dat → verb to the end."},
+        {type:"mc", en:"'…, but it's expensive.' (normal order?)", stem:"het is mooi, ___ het is duur", choices:["maar","omdat","dat","terwijl"], answer:"maar", rule:"maar → coordinating, normal order."},
+        {type:"type", en:"If it rains, I'll stay home. (als, regenen)", ok:["als het regent blijf ik thuis","als het regent, blijf ik thuis"], rule:"als → verb to end; main clause then inverts."},
+        {type:"gap", en:"He says that he ___ tired. (dat, zijn)", template:"hij zegt dat hij moe ___", ok:["is"], rule:"dat → verb to the end: is."},
+        {type:"type", en:"I'm learning Dutch because I live here. (omdat, wonen)", ok:["ik leer nederlands omdat ik hier woon"], rule:"omdat → woon at the end."},
+        {type:"type", en:"She's happy because she passed. (want, geslaagd)", ok:["zij is blij want zij is geslaagd","ze is blij want ze is geslaagd"], rule:"want → normal order."}
       ]},
     { id:"b1_diedat", title:"Relative clauses", sub:"die / dat",
       lesson:`<p>“Who / which / that” is <em>die</em> for de-words and <em>dat</em> for het-words. The relative clause is a subordinate clause, so its verb goes to the <b>end</b>.</p>
-      <div class="box"><div class="ex">de man <b>die</b> daar staat</div><div class="ex">het boek <b>dat</b> ik lees</div></div>`,
+      <div class="box"><div class="ex">de man <b>die</b> daar staat — the man who's standing there</div><div class="ex">het boek <b>dat</b> ik lees — the book that I'm reading</div></div>
+      <p>After a preposition referring to a thing, Dutch uses <em>waar</em> + preposition instead: <em>de stoel <b>waarop</b> ik zit</em> (the chair I'm sitting on).</p>`,
       ex:[
         {type:"mc", en:"the man who works here", stem:"de man ___ hier werkt", choices:["die","dat","wie","wat"], answer:"die", rule:"de-word → die."},
         {type:"gap", en:"the book that I read", template:"het boek ___ ik lees", ok:["dat"], rule:"het-word → dat."},
-        {type:"type", en:"the woman who lives here (wonen)", ok:["de vrouw die hier woont"], rule:"die + verb to the end."}
+        {type:"type", en:"the woman who lives here (wonen)", ok:["de vrouw die hier woont"], rule:"die + verb to the end."},
+        {type:"mc", en:"the house that is big", stem:"het huis ___ groot is", choices:["dat","die","wat","wie"], answer:"dat", rule:"het-word → dat."},
+        {type:"gap", en:"the children who play outside (de kinderen)", template:"de kinderen ___ buiten spelen", ok:["die"], rule:"plural → die (all plurals are de)."},
+        {type:"type", en:"the man that I know (kennen)", ok:["de man die ik ken"], rule:"die + verb to the end."},
+        {type:"mc", en:"the car that I bought", stem:"de auto ___ ik heb gekocht", choices:["die","dat","wat","wie"], answer:"die", rule:"de-word → die."},
+        {type:"type", en:"the book that lies there (liggen)", ok:["het boek dat daar ligt"], rule:"het-word → dat, verb to end."}
       ]}
   ]},
 
   { code:"B2", note:"where your real errors live", units:[
     { id:"b2_er", title:"The five jobs of 'er'", sub:"the boss fight",
       lesson:`<p><em>er</em> does five jobs. The one that trips everyone: <b>er + preposition</b> replacing a thing. Dutch cannot say <em>met het</em> about an object — it fuses to <em>ermee</em>. And when an <b>adjective</b> is present, <em>er</em> leaps forward and the preposition strands at the end.</p>
-      <div class="box"><div class="ex">Ik denk <b>eraan</b>. (I think about it)</div><div class="ex">Ik ben <b>er</b> blij <b>mee</b>. (adjective splits them)</div><div class="ex">Ik heb <b>er</b> drie. (= of them)</div></div>`,
+      <div class="box"><div class="ex">1. Fake subject: <b>Er</b> staan drie katten in de tuin.</div><div class="ex">2. + preposition: Ik denk <b>eraan</b>. / Ik ben <b>er</b> blij <b>mee</b>.</div><div class="ex">3. Of them: Ik heb <b>er</b> drie.</div><div class="ex">4. Place: Ik ben <b>er</b> geweest.</div><div class="ex">5. Passive: <b>Er</b> wordt veel gewerkt.</div></div>
+      <p>The fake-subject <em>er</em> agrees with the <b>real</b> subject: <em>er <b>staan</b> drie katten</em> (plural), not <em>er staat</em>.</p>`,
       ex:[
         {type:"type", en:"I'm happy with it. (watch the adjective)", ok:["ik ben er blij mee"], traps:[[/ermee|blij ermee/,"Adjective → split: er blij mee."]], rule:"er + adjective → split."},
         {type:"gap", en:"Are you afraid of it? (bang voor)", template:"ben je ___ bang ___", ok:["er voor"], rule:"er + adjective + preposition → split."},
         {type:"mc", en:"I have two of them.", stem:"ik heb ___ twee", choices:["er","—","ze","die"], answer:"er", rule:"er = of them."},
-        {type:"type", en:"I'm waiting for it. (wachten op)", ok:["ik wacht erop"], traps:[[/er op/,"Adjacent → fused: erop."]], rule:"Fused when adjacent."}
+        {type:"type", en:"I'm waiting for it. (wachten op)", ok:["ik wacht erop"], traps:[[/er op/,"Adjacent → fused: erop."]], rule:"Fused when adjacent."},
+        {type:"type", en:"There are three cats in the garden.", ok:["er zijn drie katten in de tuin","er staan drie katten in de tuin"], traps:[[/er staat|er is drie/,"Agrees with katten (plural): staan/zijn."]], rule:"Fake subject agrees with the real subject."},
+        {type:"type", en:"I think about it. (denken aan)", ok:["ik denk eraan"], rule:"er + aan → eraan."},
+        {type:"type", en:"He is proud of it. (trots op)", ok:["hij is er trots op"], traps:[[/ertrots|trots erop/,"Adjective splits them: er trots op."]], rule:"er + adjective + op → split."},
+        {type:"mc", en:"A lot is worked here. (passive)", stem:"___ wordt hier veel gewerkt", choices:["er","het","dat","dit"], answer:"er", rule:"Passive placeholder er."},
+        {type:"type", en:"Have you been there? (place)", ok:["ben je er geweest","ben jij er geweest"], rule:"er = there (place)."}
       ]},
     { id:"b2_passive", title:"The passive", sub:"worden + participle",
-      lesson:`<p>The passive uses <em>worden</em> + past participle. NT2 writing loves it because it sounds formal and objective.</p>
-      <div class="box"><div class="ex">De brief <b>wordt</b> geschreven. (is being written)</div><div class="ex">Er <b>wordt</b> veel gewerkt. (a lot of work is done)</div></div>
-      <p>Past passive uses <em>werd</em> (imperfect) or <em>is … geworden</em>.</p>`,
+      lesson:`<p>The passive uses <em>worden</em> + past participle. NT2 writing loves it because it sounds formal and objective — the focus moves from who does it to what gets done.</p>
+      <div class="box"><div class="ex">De brief <b>wordt</b> geschreven. — The letter is being written.</div><div class="ex">Er <b>wordt</b> veel gewerkt. — A lot of work is done. (impersonal)</div></div>
+      <p>Past passive: <em>werd</em> (imperfect) or <em>is … geworden</em>: <em>De brief <b>werd</b> geschreven</em> / <em>De brief is geschreven.</em> Note the doer, if named, uses <em>door</em>: <em>De brief wordt <b>door</b> hem geschreven.</em></p>`,
       ex:[
         {type:"gap", en:"The letter is being written.", template:"de brief ___ geschreven", ok:["wordt"], rule:"passive = worden + participle."},
-        {type:"mc", en:"A lot is worked here. (impersonal)", stem:"er ___ hier veel gewerkt", choices:["wordt","worden","is","word"], answer:"wordt", rule:"er wordt … gewerkt."}
+        {type:"mc", en:"A lot is worked here. (impersonal)", stem:"er ___ hier veel gewerkt", choices:["wordt","worden","is","word"], answer:"wordt", rule:"er wordt … gewerkt."},
+        {type:"type", en:"The house is being sold. (verkopen)", ok:["het huis wordt verkocht"], rule:"worden + participle: wordt verkocht."},
+        {type:"gap", en:"The letter was written. (imperfect passive)", template:"de brief ___ geschreven", ok:["werd"], rule:"past passive: werd."},
+        {type:"type", en:"The books are being read. (lezen, plural)", ok:["de boeken worden gelezen"], rule:"plural → worden."},
+        {type:"mc", en:"The letter is written by him. (door)", stem:"de brief wordt ___ hem geschreven", choices:["door","van","met","bij"], answer:"door", rule:"agent → door."},
+        {type:"type", en:"The food is being cooked. (koken)", ok:["het eten wordt gekookt"], rule:"wordt + gekookt."},
+        {type:"gap", en:"Here Dutch is spoken. (spreken)", template:"hier ___ Nederlands gesproken", ok:["wordt"], rule:"wordt + gesproken."}
       ]},
     { id:"b2_imperfect", title:"Perfect vs imperfect", sub:"sounding like B2",
-      lesson:`<p>Writing everything in the perfect reads as B1. B2 writing <b>opens</b> in the perfect, then narrates in the <b>imperfect</b> (<em>ik werkte, het regende</em>). And <em>zijn, hebben</em> and the modals almost always take the imperfect: <em>was, had, kon, moest, wilde</em>.</p>
-      <div class="box"><div class="ex">Ik ben verhuisd. Het <b>regende</b>, ik <b>kende</b> niemand, mijn kamer <b>was</b> koud.</div></div>`,
+      lesson:`<p>Writing everything in the perfect reads as B1. B2 writing <b>opens</b> in the perfect, then narrates in the <b>imperfect</b> (<em>ik werkte, het regende</em>). And <em>zijn, hebben</em> and the modals almost always take the imperfect: <em>was, had, kon, moest, wilde</em> — nobody writes <em>ik heb gekund</em>.</p>
+      <div class="box"><div class="ex">Ik <b>ben</b> vorig jaar verhuisd. Het <b>regende</b> vaak, ik <b>kende</b> niemand, en mijn kamer <b>was</b> koud.</div></div>
+      <p>The pattern: perfect to <b>announce</b> an event, imperfect to <b>describe and narrate</b> around it.</p>`,
       ex:[
         {type:"gap", en:"It rained every day. (imperfect of regenen)", template:"het ___ elke dag", ok:["regende"], rule:"imperfect for narration."},
         {type:"mc", en:"I was tired. (not 'ben geweest')", stem:"ik ___ moe", choices:["was","ben","heb","werd"], answer:"was", rule:"zijn → imperfect was in narration."},
-        {type:"type", en:"I couldn't sleep. (kunnen, imperfect)", ok:["ik kon niet slapen"], rule:"modal → imperfect kon."}
+        {type:"type", en:"I couldn't sleep. (kunnen, imperfect)", ok:["ik kon niet slapen"], rule:"modal → imperfect kon."},
+        {type:"type", en:"I knew no one. (kennen, imperfect)", ok:["ik kende niemand"], rule:"imperfect narration: kende."},
+        {type:"gap", en:"The house was cold. (zijn, imperfect)", template:"het huis ___ koud", ok:["was"], rule:"zijn → was."},
+        {type:"type", en:"We had no money. (hebben, imperfect)", ok:["wij hadden geen geld","we hadden geen geld"], traps:[[/hebben geen geld/,"Narration → hadden."]], rule:"hebben → hadden."},
+        {type:"mc", en:"I moved last year. (announce → perfect)", stem:"ik ___ vorig jaar verhuisd", choices:["ben","was","werd","had"], answer:"ben", rule:"Announce event → perfect (ben verhuisd)."},
+        {type:"type", en:"She wanted to help. (willen, imperfect)", ok:["zij wilde helpen","ze wilde helpen"], rule:"modal → imperfect wilde."}
+      ]},
+    { id:"b2_omte", title:"om ... te & infinitive clauses", sub:"purpose and 'to'",
+      lesson:`<p><em>om … te</em> + infinitive means “in order to / to”. The <em>te</em> + infinitive lands at the <b>end</b>:</p>
+      <div class="box"><div class="ex">Ik ga naar de winkel <b>om</b> brood <b>te kopen</b>. — I'm going to the shop to buy bread.</div></div>
+      <p>With a separable verb, <em>te</em> wedges inside: <em>om hem <b>op te bellen</b></em>. Some verbs take a plain <em>te</em>-infinitive without <em>om</em>: <em>Ik probeer <b>te</b> slapen</em>, <em>Ik hoop je <b>te</b> zien</em>, <em>Ik vergeet <b>te</b> bellen</em>.</p>
+      <p>But after a <b>modal</b>, no <em>te</em>: <em>Ik wil slapen</em> (not <em>te slapen</em>).</p>`,
+      ex:[
+        {type:"type", en:"I go to the shop to buy bread. (om…te, kopen)", ok:["ik ga naar de winkel om brood te kopen"], rule:"om … te + infinitive at end."},
+        {type:"gap", en:"I'm trying to sleep. (proberen te)", template:"ik probeer ___ slapen", ok:["te"], rule:"proberen + te-infinitive."},
+        {type:"type", en:"I'm going to call to invite him. (om…te, uitnodigen)", ok:["ik bel om hem uit te nodigen"], traps:[[/te uitnodigen/,"Separable: uit te nodigen."]], rule:"te wedges inside separable verb."},
+        {type:"mc", en:"After a modal, do you use 'te'?", stem:"ik wil ___ slapen", choices:["— (no te)","te","om te","om"], answer:"— (no te)", rule:"No te after a modal."},
+        {type:"type", en:"I hope to see you. (hopen te, zien)", ok:["ik hoop je te zien","ik hoop jou te zien"], rule:"hopen + te-infinitive."},
+        {type:"gap", en:"He forgot to call. (vergeten te, bellen)", template:"hij vergeet ___ bellen", ok:["te"], rule:"vergeten + te."},
+        {type:"type", en:"She works to earn money. (om…te, verdienen)", ok:["zij werkt om geld te verdienen","ze werkt om geld te verdienen"], rule:"om … te verdienen."},
+        {type:"type", en:"It's important to practise. (het is belangrijk om…te, oefenen)", ok:["het is belangrijk om te oefenen"], rule:"om te + infinitive."}
       ]}
-  ]}
+  ]},
+
 ];
 
 // Flatten units in curriculum order
@@ -365,6 +606,34 @@ function freshState(){
 }
 let S=load()||freshState();
 if(!S.mistakes) S.mistakes=[]; // migrate older saved state
+if(!S.dialogues) S.dialogues=[];
+// MIGRATION: fill in any units missing from older saved progress (e.g. after a
+// curriculum expansion). Without this, reading an unknown unit's status crashes.
+(function migrateUnits(){
+  if(!S.unit) S.unit={};
+  // which levels has the user fully finished? (all their known units done)
+  const levelDone={};
+  LEVELS.forEach(L=>{
+    const known=L.units.filter(u=>S.unit[u.id]);
+    levelDone[L.code] = known.length>0 && known.every(u=>S.unit[u.id].status==="done");
+  });
+  let added=false, firstNew=null;
+  LEVELS.forEach((L,li)=>{
+    L.units.forEach(u=>{
+      if(!S.unit[u.id]){
+        added=true;
+        // if this level (or a lower one) is already done, unlock the new unit; else lock it
+        const lowerAllDone = LEVELS.slice(0,li).every(x=>levelDone[x.code]!==false) && (levelDone[L.code] || li===0);
+        S.unit[u.id] = { status: (levelDone[L.code]? "active" : "locked"), mastery:0 };
+        if(!firstNew) firstNew=u.id;
+      }
+    });
+  });
+  // safety net: if NOTHING is active/done anywhere (fully fresh or fully locked), open the first unit
+  const anyOpen = UNITS.some(u=>S.unit[u.id] && S.unit[u.id].status!=="locked");
+  if(!anyOpen && UNITS.length){ S.unit[UNITS[0].id]={status:"active",mastery:0}; }
+  if(added) save(S);
+})();
 (function(){const t=today();if(S.lastDay!==t){if(S.lastDay){const gap=Math.round((new Date(t)-new Date(S.lastDay))/86400000);S.dayStreak=gap===1?S.dayStreak+1:1;}else S.dayStreak=1;S.lastDay=t;save(S);}})();
 
 /* --- Mistakes collection (lapse box) ---
@@ -477,7 +746,7 @@ function finishPlacement(landIdx){
   let firstActive=null;
   LEVELS.forEach((L,li)=>{
     L.units.forEach(u=>{
-      if(li<landIdx){ S.unit[u.id]={status:"done",mastery:Math.max(S.unit[u.id].mastery,0.7)}; }
+      if(li<landIdx){ S.unit[u.id]={status:"done",mastery:Math.max((S.unit[u.id]&&S.unit[u.id].mastery)||0,0.7)}; }
       else if(li===landIdx && firstActive===null){ S.unit[u.id]={status:"active",mastery:0}; firstActive=u.id; }
       else { S.unit[u.id]={status:"locked",mastery:0}; }
     });
@@ -751,7 +1020,17 @@ const DRILL_TOPICS=[
   "perfect vs imperfect for narration",
   "de/het articles and plurals",
   "modal verbs (kunnen, moeten, willen, mogen)",
-  "the passive with worden"
+  "the passive with worden",
+  "negation: niet vs geen",
+  "questions: yes/no inversion and question words (wie, wat, waar, hoe, wanneer)",
+  "possessives (mijn, jouw, zijn, haar, ons vs onze)",
+  "the imperfect tense (regular -te/-de and irregulars was, had, ging)",
+  "reflexive verbs (zich wassen, me voelen, zich vergissen)",
+  "comparatives and superlatives (groter, grootst, beter, dan, net zo ... als)",
+  "conjunctions and word order (want vs omdat, dat, als, terwijl)",
+  "relative clauses (die vs dat)",
+  "om ... te and te-infinitive clauses",
+  "numbers and telling time (half vier, kwart over, om ... uur)"
 ];
 // session-only credentials (NOT persisted)
 let OR_KEY=null, OR_MODEL="x-ai/grok-latest";
@@ -995,7 +1274,173 @@ const G_PATTERNS={
       rule:drop?"het-word + singular + indefinite → no -e.":"Adjective takes -e here.",
       trap:drop?{pattern:a.e,msg:`het-word, singular, indefinite → drop the -e: ${a.nl}.`}:{pattern:" "+a.nl+" ",msg:`Here the adjective needs -e: ${a.e}.`}};
   }},
+  negation:{label:"Negation: niet vs geen", build(){
+    if(Math.random()<0.5){
+      const s=G_rand(G_SUBJ), n=G_rand(G_NEG_GEEN);
+      const vb = n.verb.stem==="heb" ? (s.nl==="ik"?"heb":s.v===1?"hebben":s.v===3?"heeft":"hebt") : G_conjP(s,n.verb.stem,n.verb.inf);
+      const enVerb = s.v===3 ? (n.verb.en==="have"?"has":n.verb.en+"s") : n.verb.en;
+      return {en:`${G_cap(s.en)} ${enVerb} no ${n.ennoun}.`,ok:[`${G_cap(s.nl)} ${vb} geen ${n.nl}`.toLowerCase()],
+        rule:"Indefinite noun → geen.",trap:{pattern:"niet",msg:"Before an indefinite noun use geen, not niet."}};
+    } else {
+      const s=G_rand(G_SUBJ), a=G_rand(G_NEG_NIET);
+      return {en:`${G_cap(s.en)} ${s.v===3?"is":s.v===1?"are":s.en==="I"?"am":"are"} not ${a.en}.`,
+        ok:[`${G_cap(s.nl)} ${s.ben} niet ${a.nl}`.toLowerCase()],
+        rule:"Adjective → niet.",trap:{pattern:"geen",msg:"Negating an adjective uses niet, not geen."}};
+    }
+  }},
+  imperfect:{label:"Imperfect tense", build(){
+    const s=G_rand(G_SUBJ), v=G_rand(G_IMPF), t=G_rand(G_IMPF_TIME);
+    const form = s.v===1 ? v.impf+"n" : v.impf;
+    return {en:`${G_cap(s.en)} ${v.en} ${t.en}.`,ok:[`${G_cap(s.nl)} ${form} ${t.nl}`.toLowerCase()],
+      rule:`Imperfect: ${v.inf} → ${v.impf}.`,trap:{pattern:"ge"+v.inf.slice(0,3),msg:`This is imperfect (${v.impf}), not the perfect participle.`}};
+  }},
+  modals:{label:"Modal verbs", build(){
+    const s=G_rand(G_SUBJ), m=G_rand(G_MODALS), v=G_rand(G_MODAL_VERB);
+    const mform = s.v===1 ? m.plnl : m.nl;
+    return {en:`${G_cap(s.en)} ${s.v===3&&m.en==="want to"?"wants to":m.en} ${v.en}.`,ok:[`${G_cap(s.nl)} ${mform} ${v.nl}`.toLowerCase()],
+      rule:"Modal + infinitive at the end.",trap:{pattern:"te "+v.nl,msg:`No te after a modal: just ${mform} ${v.nl}.`}};
+  }},
+  comparative:{label:"Comparatives (…er dan)", build(){
+    const c=G_rand(G_COMP);
+    const pairs=[
+      {ensubj:"This house",nlsubj:"dit huis",ben:"is",than:"that one",nlthan:"dat"},
+      {ensubj:"My car",nlsubj:"mijn auto",ben:"is",than:"yours",nlthan:"die van jou"},
+      {ensubj:"This book",nlsubj:"dit boek",ben:"is",than:"the other one",nlthan:"het andere"},
+      {ensubj:"He",nlsubj:"hij",ben:"is",than:"me",nlthan:"ik"},
+      {ensubj:"She",nlsubj:"zij",ben:"is",than:"him",nlthan:"hij"},
+    ];
+    const p=G_rand(pairs);
+    const enMap={big:"bigger",small:"smaller",expensive:"more expensive",nice:"nicer"};
+    return {en:`${p.ensubj} is ${enMap[c.en]} than ${p.than}.`,ok:[`${p.nlsubj} ${p.ben} ${c.er} dan ${p.nlthan}`.toLowerCase()],
+      rule:`Comparative: ${c.nl} → ${c.er}, + dan.`,trap:{pattern:"meer "+c.nl,msg:`Dutch adds -er: ${c.er}, not "meer ${c.nl}".`}};
+  }},
+  possessive:{label:"Possessives", build(){
+    const p=G_rand(G_POSS), n=G_rand(G_POSS_NOUN);
+    return {en:`${p.en} ${n.en}`,ok:[`${p.nl} ${n.nl}`.toLowerCase()],rule:`${p.en} = ${p.nl}.`,
+      trap:{pattern:"de "+n.nl,msg:`Use the possessive ${p.nl}, not an article.`}};
+  }},
+  question_word:{label:"Question words", build(){
+    const qs=[
+      {en:"Where do you live?",nl:"waar woon jij",alt:["waar woon je"]},
+      {en:"What are you doing?",nl:"wat doe jij",alt:["wat doe je"]},
+      {en:"Who is that?",nl:"wie is dat",alt:[]},
+      {en:"When are you coming?",nl:"wanneer kom jij",alt:["wanneer kom je"]},
+      {en:"How are you?",nl:"hoe gaat het",alt:[]},
+      {en:"Why are you tired?",nl:"waarom ben jij moe",alt:["waarom ben je moe"]},
+    ];
+    const q=G_rand(qs);
+    return {en:q.en,ok:[q.nl,...q.alt],rule:"Question word + verb (jij drops -t).",
+      trap:{pattern:"jij "+(q.nl.split(" ")[1]||""),msg:"The verb comes right after the question word."}};
+  }},
 };
+// vocab pools + helper for the new patterns
+function G_conjP(subj,stem,infin){ if(subj.nl==="ik")return stem; if(subj.v===1)return infin; return stem.endsWith("t")?stem:stem+"t"; }
+const G_NEG_GEEN=[
+  {en:"a car",ennoun:"car",nl:"auto",verb:{en:"have",stem:"heb",inf:"hebben"}},
+  {en:"bread",ennoun:"bread",nl:"brood",verb:{en:"eat",stem:"eet",inf:"eten"}},
+  {en:"coffee",ennoun:"coffee",nl:"koffie",verb:{en:"drink",stem:"drink",inf:"drinken"}},
+  {en:"money",ennoun:"money",nl:"geld",verb:{en:"have",stem:"heb",inf:"hebben"}},
+];
+const G_NEG_NIET=[{en:"tired",nl:"moe"},{en:"ill",nl:"ziek"},{en:"happy",nl:"blij"},{en:"nice",nl:"aardig"}];
+const G_IMPF=[
+  {en:"worked",inf:"werken",impf:"werkte"},{en:"played",inf:"spelen",impf:"speelde"},
+  {en:"lived",inf:"wonen",impf:"woonde"},{en:"learned",inf:"leren",impf:"leerde"},{en:"cooked",inf:"koken",impf:"kookte"},
+];
+const G_IMPF_TIME=[{en:"yesterday",nl:"gisteren"},{en:"last week",nl:"vorige week"},{en:"often",nl:"vaak"}];
+const G_MODALS=[{en:"can",nl:"kan",plnl:"kunnen"},{en:"must",nl:"moet",plnl:"moeten"},{en:"want to",nl:"wil",plnl:"willen"},{en:"may",nl:"mag",plnl:"mogen"}];
+const G_MODAL_VERB=[{en:"swim",nl:"zwemmen"},{en:"sleep",nl:"slapen"},{en:"work",nl:"werken"},{en:"cook",nl:"koken"}];
+const G_COMP=[{en:"big",nl:"groot",er:"groter"},{en:"small",nl:"klein",er:"kleiner"},{en:"expensive",nl:"duur",er:"duurder"},{en:"nice",nl:"leuk",er:"leuker"}];
+const G_POSS=[{en:"my",nl:"mijn"},{en:"her",nl:"haar"},{en:"his",nl:"zijn"},{en:"their",nl:"hun"}];
+const G_POSS_NOUN=[{en:"house",nl:"huis"},{en:"book",nl:"boek"},{en:"dog",nl:"hond"},{en:"car",nl:"auto"}];
+// --- second batch of patterns ---
+const G_PRES_VERB=[
+  {en:"work",stem:"werk",inf:"werken",obj:{en:"hard",nl:"hard"}},
+  {en:"live",stem:"woon",inf:"wonen",obj:{en:"in Utrecht",nl:"in Utrecht"}},
+  {en:"play",stem:"speel",inf:"spelen",obj:{en:"outside",nl:"buiten"}},
+  {en:"drink",stem:"drink",inf:"drinken",obj:{en:"coffee",nl:"koffie"}},
+  {en:"learn",stem:"leer",inf:"leren",obj:{en:"Dutch",nl:"Nederlands"}},
+];
+function G_enPres(subj,verb){ if(subj.v===3) return verb.en==="live"?"lives":verb.en+"s"; return verb.en; }
+const G_ARTICLE_NOUNS=[
+  {en:"house",nl:"huis",art:"het"},{en:"man",nl:"man",art:"de"},{en:"woman",nl:"vrouw",art:"de"},
+  {en:"book",nl:"boek",art:"het"},{en:"car",nl:"auto",art:"de"},{en:"child",nl:"kind",art:"het"},
+  {en:"table",nl:"tafel",art:"de"},{en:"dog",nl:"hond",art:"de"},
+];
+const G_PLURALS=[
+  {en:"book",sg:"boek",pl:"boeken"},{en:"house",sg:"huis",pl:"huizen"},{en:"man",sg:"man",pl:"mannen"},
+  {en:"table",sg:"tafel",pl:"tafels"},{en:"car",sg:"auto",pl:"auto's"},{en:"woman",sg:"vrouw",pl:"vrouwen"},
+  {en:"child",sg:"kind",pl:"kinderen"},{en:"dog",sg:"hond",pl:"honden"},{en:"apple",sg:"appel",pl:"appels"},
+];
+const G_INV_TIME=[{en:"Tomorrow",nl:"morgen"},{en:"Today",nl:"vandaag"},{en:"Now",nl:"nu"},{en:"Tonight",nl:"vanavond"}];
+const G_INV_ACTION=[
+  {subj:"ik",verb:"ga",rest:"naar huis",enrest:"go home",ensubj:"I"},
+  {subj:"zij",verb:"werkt",rest:"",enrest:"works",ensubj:"she"},
+  {subj:"wij",verb:"koken",rest:"",enrest:"cook",ensubj:"we"},
+  {subj:"hij",verb:"komt",rest:"",enrest:"comes",ensubj:"he"},
+];
+const G_HEBGA=[
+  {verb:"hebben",forms:{ik:"heb",jij:"hebt",hij:"heeft",wij:"hebben"},en:"have",en3:"has",obj:{en:"a dog",nl:"een hond"}},
+  {verb:"gaan",forms:{ik:"ga",jij:"gaat",hij:"gaat",wij:"gaan"},en:"go",en3:"goes",obj:{en:"to school",nl:"naar school"}},
+];
+const G_REL=[
+  {ennoun:"the man",nl:"de man",rel:"die",encl:"who works here",nlcl:"hier werkt"},
+  {ennoun:"the book",nl:"het boek",rel:"dat",encl:"that I read",nlcl:"ik lees"},
+  {ennoun:"the woman",nl:"de vrouw",rel:"die",encl:"who lives here",nlcl:"hier woont"},
+  {ennoun:"the house",nl:"het huis",rel:"dat",encl:"that is big",nlcl:"groot is"},
+  {ennoun:"the car",nl:"de auto",rel:"die",encl:"that I bought",nlcl:"ik heb gekocht"},
+];
+const G_CONJ=[
+  {enmain:"I'm staying home",nlmain:"ik blijf thuis",ensub:"I'm ill",nlsubNORMAL:"ik ben ziek",nlsubEND:"ik ziek ben"},
+  {enmain:"She's happy",nlmain:"zij is blij",ensub:"she passed",nlsubNORMAL:"zij is geslaagd",nlsubEND:"zij geslaagd is"},
+  {enmain:"He's tired",nlmain:"hij is moe",ensub:"he worked hard",nlsubNORMAL:"hij heeft hard gewerkt",nlsubEND:"hij hard heeft gewerkt"},
+];
+const G_REFL=[{en:"feel good",verb:"voel",inf:"voelen",refl_after:"goed",en3:"feels good"},{en:"wash",verb:"was",inf:"wassen",refl_after:"",en3:"washes"}];
+const G_REFL_PRON={ik:"me",jij:"je",hij:"zich",zij:"zich",wij:"ons"};
+Object.assign(G_PATTERNS,{
+  present:{label:"Present tense", build(){
+    const s=G_rand(G_SUBJ), v=G_rand(G_PRES_VERB), form=G_conjP(s,v.stem,v.inf);
+    return {en:`${G_cap(s.en)} ${G_enPres(s,v)} ${v.obj.en}.`,ok:[`${G_cap(s.nl)} ${form} ${v.obj.nl}`.toLowerCase()],
+      rule:"ik = stem; jij/hij/zij = stem+t; wij = infinitive.",trap:{pattern:s.nl==="ik"?v.stem+"t ":"~~",msg:"ik takes the bare stem, no -t."}};
+  }},
+  articles:{label:"de or het", build(){
+    const n=G_rand(G_ARTICLE_NOUNS);
+    return {en:`the ${n.en} (de or het?)`,ok:[`${n.art} ${n.nl}`.toLowerCase()],rule:`${n.nl} is a ${n.art}-word.`,
+      trap:{pattern:(n.art==="de"?"het":"de")+" "+n.nl,msg:`${n.nl} takes ${n.art}.`}};
+  }},
+  plurals:{label:"Plurals", build(){
+    const n=G_rand(G_PLURALS);
+    return {en:`plural of '${n.sg}' (${n.en})`,ok:[n.pl],rule:`${n.sg} → ${n.pl}.`,trap:{pattern:n.sg+"en",msg:`The plural is ${n.pl}.`}};
+  }},
+  inversion:{label:"Word order: inversion", build(){
+    const t=G_rand(G_INV_TIME), a=G_rand(G_INV_ACTION), rest=a.rest?" "+a.rest:"";
+    return {en:`${t.en} ${a.ensubj} ${a.enrest}. (start with "${t.en}")`,ok:[`${t.nl} ${a.verb} ${a.subj}${rest}`.toLowerCase()],
+      rule:"Fronted phrase → verb second → subject after the verb.",trap:{pattern:t.nl+" "+a.subj,msg:`Inversion: ${t.nl} ${a.verb} ${a.subj}…`}};
+  }},
+  hebben_gaan:{label:"To have / to go", build(){
+    const s=G_rand(G_SUBJ), h=G_rand(G_HEBGA), key=s.nl==="ik"?"ik":s.nl==="jij"?"jij":s.v===1?"wij":"hij", form=h.forms[key];
+    return {en:`${G_cap(s.en)} ${s.v===3?h.en3:h.en} ${h.obj.en}.`,ok:[`${G_cap(s.nl)} ${form} ${h.obj.nl}`.toLowerCase()],
+      rule:`${h.verb} is irregular: ${h.forms.ik}/${h.forms.jij}/${h.forms.hij}/${h.forms.wij}.`,trap:{pattern:"~~",msg:`${h.verb}: ${form} for this subject.`}};
+  }},
+  relative:{label:"Relative clauses (die/dat)", build(){
+    const r=G_rand(G_REL);
+    return {en:`${r.ennoun} ${r.encl}`,ok:[`${r.nl} ${r.rel} ${r.nlcl}`.toLowerCase()],
+      rule:`${r.nl.split(" ")[0]}-word → ${r.rel}; verb to the end.`,trap:{pattern:(r.rel==="die"?"dat":"die")+" "+r.nlcl,msg:`${r.nl} takes ${r.rel}.`}};
+  }},
+  conjunction:{label:"want vs omdat", build(){
+    const c=G_rand(G_CONJ);
+    if(Math.random()<0.5)
+      return {en:`${c.enmain} because ${c.ensub}. (use OMDAT — verb to end)`,ok:[`${c.nlmain} omdat ${c.nlsubEND}`.toLowerCase()],
+        rule:"omdat → verb to the end.",trap:{pattern:"omdat "+c.nlsubNORMAL,msg:`omdat sends the verb to the end: ${c.nlsubEND}.`}};
+    return {en:`${c.enmain} because ${c.ensub}. (use WANT — normal order)`,ok:[`${c.nlmain} want ${c.nlsubNORMAL}`.toLowerCase()],
+      rule:"want → normal word order.",trap:{pattern:"want "+c.nlsubEND,msg:`want keeps normal order: ${c.nlsubNORMAL}.`}};
+  }},
+  reflexive:{label:"Reflexive verbs (zich)", build(){
+    const s=G_rand(G_SUBJ), r=G_rand(G_REFL), key=s.nl==="ik"?"ik":s.nl==="jij"?"jij":s.v===1?"wij":"hij";
+    const pron=G_REFL_PRON[key], form=G_conjP(s,r.verb,r.inf), after=r.refl_after?" "+r.refl_after:"";
+    return {en:`${G_cap(s.en)} ${s.v===3?r.en3:r.en}.`,ok:[`${G_cap(s.nl)} ${form} ${pron}${after}`.toLowerCase()],
+      rule:`Reflexive pronoun: ${key} → ${pron}.`,trap:{pattern:"~~",msg:`${key} takes the reflexive ${pron}.`}};
+  }},
+});
 
 let genPat=null, genItem=null, genStats={n:0,ok:0}, genMode="type", genPicked=null;
 function gen(){ if(!genPat)return genPick(); return genLoop(); }
