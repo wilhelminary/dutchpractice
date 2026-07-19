@@ -117,6 +117,26 @@
   .repro input.matched{border-color:var(--sage);outline-color:var(--sage)}
   .repro .hint{font-size:12px;color:var(--ink-soft);margin-top:7px;min-height:16px}
   .repro .hint.ok{color:var(--sage)}
+  /* dialogue reader */
+  .dlg-card{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;cursor:pointer;transition:border-color .15s}
+  .dlg-card:hover{border-color:var(--gold)}
+  .dlg-card h3{font-family:"Fraunces",serif;font-size:17px;font-weight:600;margin-bottom:3px}
+  .dlg-card p{font-size:13px;color:var(--ink-soft)}
+  .dlg-line{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+  .dlg-line.b{flex-direction:row-reverse;text-align:right}
+  .dlg-who{flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:500;padding:4px 9px;border-radius:100px;white-space:nowrap;margin-top:3px}
+  .dlg-who.a{background:var(--gold-tint);color:var(--gold)}
+  .dlg-who.b{background:var(--sage-tint);color:var(--sage)}
+  .dlg-bubble{flex:1;min-width:0}
+  .dlg-nl{font-size:17px;line-height:1.5}
+  .dlg-line.a .dlg-nl{color:var(--ink)}
+  .dlg-line.b .dlg-nl{color:var(--ink)}
+  .dlg-en{font-size:13.5px;color:var(--ink-soft);font-style:italic;margin-top:3px}
+  .dlg-en.hidden{display:none}
+  .dlg-legend{display:flex;gap:16px;font-size:13px;color:var(--ink-soft);margin-bottom:18px;flex-wrap:wrap}
+  .dlg-legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .dot.a{background:var(--gold)} .dot.b{background:var(--sage)}
   .center{text-align:center}
   .big-num{font-family:"Fraunces",serif;font-size:40px;font-weight:600;color:var(--gold);line-height:1}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -137,6 +157,7 @@
     <button data-tab="learn" class="on">Learn</button>
     <button data-tab="review">Review</button>
     <button data-tab="gen">Generate</button>
+    <button data-tab="dialogue">Read together</button>
     <button data-tab="mistakes">Mistakes</button>
     <button data-tab="drill">AI ∞</button>
     <button data-tab="data">Data</button>
@@ -379,7 +400,7 @@ function grade(c,ok){const q=ok?5:2;if(q<3){c.reps=0;c.interval=1;}else{c.reps++
 const view=document.getElementById("view");
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
-  const t=b.dataset.tab; if(t==="learn")learn();else if(t==="review")review();else if(t==="gen")gen();else if(t==="mistakes")mistakes();else if(t==="drill")drill();else data();
+  const t=b.dataset.tab; if(t==="learn")learn();else if(t==="review")review();else if(t==="gen")gen();else if(t==="dialogue")dialogue();else if(t==="mistakes")mistakes();else if(t==="drill")drill();else data();
 });
 function setTab(name){document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.tab===name));}
 
@@ -688,12 +709,30 @@ function data(){
     </div>
     <h2 style="font-family:Fraunces,serif;font-size:14px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-soft);margin-bottom:10px">Your data</h2>
     <p>${HAS_LS?"Progress saves automatically in this browser.":"<b>Preview mode:</b> progress is in memory only — export before closing."} Use export/import to move between devices.</p>
-    <div class="row" style="margin-top:0"><button class="act" id="exp">Export</button><button class="ghost" id="impb">Import</button></div>
+    <div class="row" style="margin-top:0"><button class="act" id="exp">Export</button><button class="ghost" id="copy" style="display:none">📋 Copy</button><button class="ghost" id="impb">Import</button></div>
     <textarea id="io" placeholder="Export appears here; paste an export and click Import to restore." style="margin-top:12px"></textarea>
-    <div class="row" style="margin-top:16px"><button class="ghost danger" id="reset">Reset everything</button></div>
+    <div class="note" id="copymsg" style="min-height:16px;color:var(--sage)"></div>
+    <div class="row" style="margin-top:12px"><button class="ghost danger" id="reset">Reset everything</button></div>
   </div>`;
-  document.getElementById("exp").onclick=()=>{document.getElementById("io").value=btoa(unescape(encodeURIComponent(JSON.stringify(S))));};
-  document.getElementById("impb").onclick=()=>{try{S=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("io").value.trim()))));save(S);alert("Restored.");setTab("learn");learn();}catch(e){alert("Invalid export.");}};
+  const io=document.getElementById("io");
+  const copyBtn=document.getElementById("copy");
+  const msg=document.getElementById("copymsg");
+  document.getElementById("exp").onclick=()=>{
+    io.value=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+    copyBtn.style.display="inline-flex";
+    msg.textContent="";
+  };
+  copyBtn.onclick=async()=>{
+    const text=io.value;
+    if(!text){ msg.textContent="Nothing to copy — click Export first."; return; }
+    let done=false;
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(text); done=true; } }catch(e){}
+    if(!done){ // fallback for older/mobile browsers
+      try{ io.focus(); io.select(); document.execCommand("copy"); done=true; }catch(e){}
+    }
+    msg.textContent = done ? "✓ Copied — now paste it on your other device and click Import." : "Couldn't copy automatically — tap the box, select all, and copy manually.";
+  };
+  document.getElementById("impb").onclick=()=>{try{S=JSON.parse(decodeURIComponent(escape(atob(io.value.trim()))));save(S);alert("Restored.");setTab("learn");learn();}catch(e){alert("Invalid export.");}};
   document.getElementById("reset").onclick=()=>{if(confirm("Wipe everything?")){S=freshState();save(S);setTab("learn");learn();}};
 }
 
@@ -958,41 +997,112 @@ const G_PATTERNS={
   }},
 };
 
-let genPat=null, genItem=null, genStats={n:0,ok:0};
+let genPat=null, genItem=null, genStats={n:0,ok:0}, genMode="type", genPicked=null;
 function gen(){ if(!genPat)return genPick(); return genLoop(); }
 function genPick(){
   view.innerHTML=`<div class="card">
     <h2 style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:4px">Generate — offline drill</h2>
-    <p class="muted" style="margin-bottom:16px">Endless fresh sentences, made by the app itself. No key, no cost, works offline. Pick a pattern and type the full sentence; explanation after each.</p>
+    <p class="muted" style="margin-bottom:14px">Endless fresh sentences, made by the app itself. No key, no cost, works offline.</p>
+    <div class="speed-row" style="margin-bottom:16px"><span>Mode:</span>
+      <button data-m="type" class="${genMode==='type'?'on':''}" id="mtype">⌨ Type it</button>
+      <button data-m="mc" class="${genMode==='mc'?'on':''}" id="mmc">👆 Tap a choice</button>
+    </div>
     <div class="choices" id="pats">
       ${Object.entries(G_PATTERNS).map(([k,p])=>`<button class="choice" data-k="${k}" style="font-family:'Public Sans',sans-serif">${p.label}</button>`).join("")}
       <button class="choice" data-k="__mix" style="font-family:'Public Sans',sans-serif">Mixed — all patterns</button>
     </div>
   </div>`;
+  const setMode=(m)=>{genMode=m;document.getElementById("mtype").classList.toggle("on",m==="type");document.getElementById("mmc").classList.toggle("on",m==="mc");};
+  document.getElementById("mtype").onclick=()=>setMode("type");
+  document.getElementById("mmc").onclick=()=>setMode("mc");
   document.querySelectorAll("#pats .choice").forEach(b=>b.onclick=()=>{genPat=b.dataset.k;genStats={n:0,ok:0};genLoop();});
 }
 function genMake(){
   const key = genPat==="__mix" ? G_rand(Object.keys(G_PATTERNS)) : genPat;
   return G_PATTERNS[key].build();
 }
+/* Build 3 plausible wrong answers by applying realistic Dutch errors to the
+   correct sentence. Falls back to generic swaps so we always get enough. */
+function genDistractors(it){
+  const correct=it.ok[0];
+  const wrong=new Set();
+  const w=correct.split(" ");
+  const swaps=[
+    // auxiliary flips
+    [/\bben\b/,"heb"],[/\bbent\b/,"hebt"],[/\bis\b/,"heeft"],[/\bzijn\b/,"hebben"],
+    [/\bheb\b/,"ben"],[/\bhebt\b/,"bent"],[/\bheeft\b/,"is"],[/\bhebben\b/,"zijn"],
+    // er + prep fused wrongly
+    [/\ber (blij|bang|trots|tevreden) (mee|voor|op|over)\b/,(m,a,p)=>`er${p} ${a}`],
+    // adjective -e toggling
+    [/\bgrote\b/,"groot"],[/\bgroot\b/,"grote"],[/\bnieuwe\b/,"nieuw"],[/\bnieuw\b/,"nieuwe"],
+    [/\bdure\b/,"duur"],[/\bkleine\b/,"klein"],
+    // separable un-split / participle errors
+    [/\bopgebeld\b/,"geopbeld"],[/\bgedronken\b/,"gedrinkt"],[/\bgeschreven\b/,"geschrijfd"],
+    [/\bgegeten\b/,"geëten"],[/\bgelezen\b/,"geleesd"],[/\bgenomen\b/,"genemen"],
+  ];
+  for(const [re,rep] of swaps){
+    if(re.test(correct)){ const cand=correct.replace(re,rep); if(cand!==correct) wrong.add(cand); }
+    if(wrong.size>=3) break;
+  }
+  // generic fallbacks: swap word order of last two words, drop a word
+  if(wrong.size<3 && w.length>2){ const c=[...w]; [c[c.length-1],c[c.length-2]]=[c[c.length-2],c[c.length-1]]; wrong.add(c.join(" ")); }
+  if(wrong.size<3 && w.length>3){ const c=[...w]; c.splice(2,1); wrong.add(c.join(" ")); }
+  if(wrong.size<3){ wrong.add(correct.replace(/en\b/,"t")); }
+  return [...wrong].filter(x=>x!==correct).slice(0,3);
+}
 function genLoop(){
-  genItem=genMake();
+  genItem=genMake(); genPicked=null;
   const acc=genStats.n?Math.round(100*genStats.ok/genStats.n):0;
   const label = genPat==="__mix"?"mixed":G_PATTERNS[genPat].label;
-  view.innerHTML=`<div class="card ex-wrap">
-    <div class="eyebrow"><span>Generate · ${genStats.n} done · ${acc}%</span><span class="kind">offline · type</span></div>
-    <div class="prompt">${genItem.en}</div>
-    <div class="subhint">${label}</div>
-    <label class="sr" for="gans">Type the Dutch</label>
-    <input type="text" id="gans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the full sentence…">
-    <div class="row"><button class="act" id="ggo">Check</button><button class="ghost" id="gskip">Don't know</button><button class="ghost" id="gback">Change pattern</button></div>
-    <div id="gverdict"></div>
-  </div>`;
-  const inp=document.getElementById("gans");inp.focus();
-  inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();genCheck(false);}};
-  document.getElementById("ggo").onclick=()=>genCheck(false);
-  document.getElementById("gskip").onclick=()=>genCheck(true);
-  document.getElementById("gback").onclick=()=>{genPat=null;genPick();};
+  if(genMode==="mc"){
+    const distract=genDistractors(genItem);
+    const opts=shuffleArr([genItem.ok[0], ...distract]);
+    genItem._opts=opts;
+    view.innerHTML=`<div class="card ex-wrap">
+      <div class="eyebrow"><span>Generate · ${genStats.n} done · ${acc}%</span><span class="kind">tap · ${label}</span></div>
+      <div class="prompt">${genItem.en}</div>
+      <div class="subhint">tap the correct Dutch</div>
+      <div class="choices" id="gchoices">${opts.map(o=>`<button class="choice" data-v="${o}">${o}</button>`).join("")}</div>
+      <div class="row"><button class="ghost" id="gback">Change pattern / mode</button></div>
+      <div id="gverdict"></div>
+    </div>`;
+    document.querySelectorAll("#gchoices .choice").forEach(c=>c.onclick=()=>genCheckMC(c.dataset.v));
+    document.getElementById("gback").onclick=()=>{genPat=null;genPick();};
+  } else {
+    view.innerHTML=`<div class="card ex-wrap">
+      <div class="eyebrow"><span>Generate · ${genStats.n} done · ${acc}%</span><span class="kind">type · ${label}</span></div>
+      <div class="prompt">${genItem.en}</div>
+      <div class="subhint">${label}</div>
+      <label class="sr" for="gans">Type the Dutch</label>
+      <input type="text" id="gans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type the full sentence…">
+      <div class="row"><button class="act" id="ggo">Check</button><button class="ghost" id="gskip">Don't know</button><button class="ghost" id="gback">Change pattern / mode</button></div>
+      <div id="gverdict"></div>
+    </div>`;
+    const inp=document.getElementById("gans");inp.focus();
+    inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();genCheck(false);}};
+    document.getElementById("ggo").onclick=()=>genCheck(false);
+    document.getElementById("gskip").onclick=()=>genCheck(true);
+    document.getElementById("gback").onclick=()=>{genPat=null;genPick();};
+  }
+}
+function shuffleArr(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function genCheckMC(val){
+  const it=genItem; if(genPicked!==null)return; genPicked=val;
+  const correct=norm(val)===norm(it.ok[0]);
+  genStats.n++; if(correct)genStats.ok++; else addMistake(it,"gen");
+  document.querySelectorAll("#gchoices .choice").forEach(c=>{
+    if(norm(c.dataset.v)===norm(it.ok[0]))c.classList.add("right");
+    else if(c.dataset.v===val)c.classList.add("wrong");
+    c.style.pointerEvents="none";
+  });
+  const v=document.getElementById("gverdict");
+  v.className="verdict "+(correct?"good":"bad");
+  v.innerHTML=`<h3>${correct?"Goed":"Niet goed"}</h3><div class="answer"><span class="fix">${it.ok[0]}</span></div>${it.trap&&!correct?`<div class="diag">${it.trap.msg}</div>`:""}<div class="rulebox">${it.rule}</div>`;
+  // tap-friendly: big Next button
+  const r=document.createElement("div"); r.className="row";
+  r.innerHTML=`<button class="cta" id="gnext" style="margin-top:4px">Next →</button>`;
+  v.appendChild(r);
+  document.getElementById("gnext").onclick=genLoop;
 }
 function genCheck(skipped){
   const it=genItem,user=document.getElementById("gans").value;
@@ -1098,6 +1208,206 @@ function mkCheck(skipped){
     const go=document.getElementById("mgo"); go.textContent="Next →"; go.onclick=()=>{mkPos++;mkRun();};
     document.getElementById("mskip").style.display="none";
     wireRepro(it.ok[0], go, ()=>go.focus());
+  }
+}
+
+
+/* =========================================================================
+   READ TOGETHER — dialogues to read aloud with a partner.
+   No scoring. You read the gold lines, your partner reads the green ones.
+   English translation toggles on/off.
+========================================================================= */
+const DIALOGUES=[
+  {title:"Het ontbijt", setting:"Over breakfast, deciding the morning", lines:[
+    {who:"A",nl:"Goedemorgen! Heb je goed geslapen?",en:"Good morning! Did you sleep well?"},
+    {who:"B",nl:"Ja, heel goed. En jij?",en:"Yes, very well. And you?"},
+    {who:"A",nl:"Ook goed. Wil je koffie of thee?",en:"Also good. Do you want coffee or tea?"},
+    {who:"B",nl:"Koffie, graag. Met een beetje melk.",en:"Coffee, please. With a little milk."},
+    {who:"A",nl:"Zal ik ook brood maken?",en:"Shall I make some bread too?"},
+    {who:"B",nl:"Lekker. Doe maar met kaas.",en:"Nice. With cheese, please."},
+    {who:"A",nl:"Wat gaan we vandaag doen?",en:"What are we going to do today?"},
+    {who:"B",nl:"Misschien naar de markt? Het is mooi weer.",en:"Maybe to the market? The weather is nice."},
+  ]},
+  {title:"Boodschappen doen", setting:"Planning the grocery shopping", lines:[
+    {who:"A",nl:"We hebben bijna niks meer in huis.",en:"We have almost nothing left in the house."},
+    {who:"B",nl:"Klopt. Wat moeten we kopen?",en:"True. What do we need to buy?"},
+    {who:"A",nl:"Groenten, brood, en misschien vis voor vanavond.",en:"Vegetables, bread, and maybe fish for tonight."},
+    {who:"B",nl:"Goed idee. Ik wil ook wat fruit.",en:"Good idea. I also want some fruit."},
+    {who:"A",nl:"Ga je mee, of zal ik alleen gaan?",en:"Are you coming, or shall I go alone?"},
+    {who:"B",nl:"Ik ga mee. Dan dragen we samen de tassen.",en:"I'll come. Then we'll carry the bags together."},
+    {who:"A",nl:"Fijn. Pak jij je jas even?",en:"Great. Can you grab your coat?"},
+    {who:"B",nl:"Ja, ik kom eraan.",en:"Yes, I'm coming."},
+  ]},
+  {title:"Plannen voor het weekend", setting:"Talking about weekend plans", lines:[
+    {who:"A",nl:"Heb je al plannen voor het weekend?",en:"Do you have plans for the weekend yet?"},
+    {who:"B",nl:"Nog niet echt. Wat wil jij doen?",en:"Not really yet. What do you want to do?"},
+    {who:"A",nl:"Misschien kunnen we naar het strand gaan.",en:"Maybe we can go to the beach."},
+    {who:"B",nl:"Als het niet regent, lijkt me dat leuk.",en:"If it doesn't rain, that sounds fun to me."},
+    {who:"A",nl:"Ik kijk wel even naar het weer.",en:"I'll take a look at the weather."},
+    {who:"B",nl:"En zondag gaan we naar mijn moeder, toch?",en:"And on Sunday we're going to my mother's, right?"},
+    {who:"A",nl:"O ja, dat was ik bijna vergeten.",en:"Oh yes, I almost forgot that."},
+    {who:"B",nl:"Geen zorgen, ik herinner het je wel.",en:"No worries, I'll remind you."},
+  ]},
+  {title:"Koken in de keuken", setting:"Cooking dinner together", lines:[
+    {who:"A",nl:"Wat maken we vanavond?",en:"What are we making tonight?"},
+    {who:"B",nl:"Ik dacht aan pasta. Snel en makkelijk.",en:"I was thinking of pasta. Quick and easy."},
+    {who:"A",nl:"Prima. Snijd jij de ui?",en:"Fine. Will you cut the onion?"},
+    {who:"B",nl:"Natuurlijk. Waar ligt het mes?",en:"Of course. Where is the knife?"},
+    {who:"A",nl:"In de lade naast het fornuis.",en:"In the drawer next to the stove."},
+    {who:"B",nl:"Gevonden. Zal ik ook knoflook doen?",en:"Found it. Shall I add garlic too?"},
+    {who:"A",nl:"Ja, lekker. Ik zet het water op.",en:"Yes, nice. I'll put the water on."},
+    {who:"B",nl:"Over twintig minuten kunnen we eten.",en:"In twenty minutes we can eat."},
+  ]},
+  {title:"Een dagje uit", setting:"Planning a day trip", lines:[
+    {who:"A",nl:"Zullen we morgen een dagje weg?",en:"Shall we go away for the day tomorrow?"},
+    {who:"B",nl:"Leuk! Waar wil je naartoe?",en:"Fun! Where do you want to go?"},
+    {who:"A",nl:"Naar Utrecht, misschien. Ik ben er nog nooit geweest.",en:"To Utrecht, maybe. I've never been there."},
+    {who:"B",nl:"Dan gaan we met de trein. Dat is het makkelijkst.",en:"Then we'll go by train. That's easiest."},
+    {who:"A",nl:"Hoe laat moeten we weg?",en:"What time do we need to leave?"},
+    {who:"B",nl:"Rond negen uur, denk ik. Dan hebben we de hele dag.",en:"Around nine, I think. Then we have the whole day."},
+    {who:"A",nl:"Ik verheug me erop.",en:"I'm looking forward to it."},
+    {who:"B",nl:"Ik ook. Ik boek straks de kaartjes.",en:"Me too. I'll book the tickets later."},
+  ]},
+  {title:"Na een lange dag", setting:"Unwinding in the evening", lines:[
+    {who:"A",nl:"Pfoe, wat een lange dag.",en:"Phew, what a long day."},
+    {who:"B",nl:"Was het druk op je werk?",en:"Was it busy at your work?"},
+    {who:"A",nl:"Heel druk. Ik ben moe.",en:"Very busy. I'm tired."},
+    {who:"B",nl:"Ga lekker zitten. Ik maak thee voor je.",en:"Go sit down. I'll make tea for you."},
+    {who:"A",nl:"Dat is lief, dank je.",en:"That's sweet, thank you."},
+    {who:"B",nl:"Zullen we straks een film kijken?",en:"Shall we watch a film later?"},
+    {who:"A",nl:"Ja, iets rustigs. Ik kan niet meer nadenken.",en:"Yes, something calm. I can't think anymore."},
+    {who:"B",nl:"Komt goed. Ontspan jij maar.",en:"It'll be fine. You just relax."},
+  ]},
+];
+let dlgShowEn=false;
+// user-generated dialogues persist alongside the built-in ones
+if(!S.dialogues) S.dialogues=[];
+function allDialogues(){ return [...DIALOGUES, ...(S.dialogues||[])]; }
+function dialogue(){
+  const list=allDialogues();
+  view.innerHTML=`<div class="card">
+    <h2 style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:4px">Read together</h2>
+    <p class="muted" style="margin-bottom:16px">Simple everyday dialogues to read aloud with your husband. You read the <b style="color:var(--gold)">gold</b> lines, he reads the <b style="color:var(--sage)">green</b> ones. No scoring — just practice speaking together.</p>
+    <button class="cta" id="dgen" style="margin-bottom:16px">✨ Generate a new dialogue</button>
+    <div class="choices" id="dlist">
+      ${list.map((d,i)=>`<div class="dlg-card" data-i="${i}"><h3>${d.title}${d._ai?' <span style="font-size:11px;color:var(--gold);font-weight:400">· AI</span>':''}</h3><p>${d.setting} · ${d.lines.length} lines</p></div>`).join("")}
+    </div>
+  </div>`;
+  document.getElementById("dgen").onclick=dlgGenSetup;
+  document.querySelectorAll("#dlist .dlg-card").forEach(c=>c.onclick=()=>openDialogue(+c.dataset.i));
+}
+function dlgGenSetup(){
+  // reuse the shared OpenRouter key; if not set, send them through the same setup
+  if(!OR_KEY){
+    view.innerHTML=`<div class="card set">
+      <h2 style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:4px">Generate dialogues with AI</h2>
+      <p style="margin-bottom:14px">This uses the same OpenRouter key as the AI drill. Set it up once in the <b>AI ∞</b> tab, then come back — or paste it here.</p>
+      <div class="box" style="background:var(--card2);border:1px solid var(--rule);border-radius:6px;padding:13px 15px;margin-bottom:14px;font-size:13px;color:var(--ink-soft)">Your key stays in this browser tab only. Use a <b style="color:var(--ink)">spending-capped key</b>. Grok works without changing OpenRouter's data settings.</div>
+      <input type="text" id="dkey" placeholder="sk-or-... (OpenRouter key)" autocomplete="off" spellcheck="false" style="margin-bottom:10px">
+      <div class="row"><button class="act" id="dsave">Save & continue</button><button class="ghost" id="dcancel">Cancel</button></div>
+    </div>`;
+    document.getElementById("dsave").onclick=()=>{const k=document.getElementById("dkey").value.trim();if(!k){alert("Paste a key.");return;}OR_KEY=k;dlgTopicPick();};
+    document.getElementById("dcancel").onclick=dialogue;
+    return;
+  }
+  dlgTopicPick();
+}
+const DLG_TOPICS=["at breakfast","grocery shopping","weekend plans","cooking dinner","a day trip","after a long day","visiting family","at a café","planning a holiday","talking about the weather","fixing something at home","making an appointment","at the market","getting ready to go out","a phone call about dinner plans"];
+function dlgTopicPick(){
+  view.innerHTML=`<div class="card">
+    <h2 style="font-family:Fraunces,serif;font-size:20px;font-weight:600;margin-bottom:4px">New dialogue — pick a situation</h2>
+    <p class="muted" style="margin-bottom:16px">Or type your own scenario at the bottom — anything you'd actually talk about at home.</p>
+    <div class="choices" id="dtopics">
+      ${DLG_TOPICS.map(t=>`<button class="choice" data-t="${t}" style="font-family:'Public Sans',sans-serif">${t}</button>`).join("")}
+    </div>
+    <input type="text" id="dcustom" placeholder="…or type your own situation" autocomplete="off" spellcheck="false" style="margin-top:12px">
+    <div class="row"><button class="act" id="dcustgo">Generate custom</button><button class="ghost" id="dcancel">Back</button></div>
+  </div>`;
+  document.querySelectorAll("#dtopics .choice").forEach(b=>b.onclick=()=>dlgGenerate(b.dataset.t));
+  document.getElementById("dcustgo").onclick=()=>{const t=document.getElementById("dcustom").value.trim();if(t)dlgGenerate(t);};
+  document.getElementById("dcancel").onclick=dialogue;
+}
+async function dlgGenerate(topic){
+  view.innerHTML=`<div class="card ex-wrap"><div class="center" style="padding:40px 0;color:var(--ink-soft)">
+    <div class="big-num" id="dspin">∙∙∙</div><div class="muted" style="margin-top:10px">writing a dialogue about “${topic}”…</div></div></div>`;
+  const el=()=>document.getElementById("dspin");let fr=["∙","∙∙","∙∙∙"],fi=0;const spin=setInterval(()=>{const e=el();if(!e){clearInterval(spin);return;}e.textContent=fr[fi++%3];},280);
+  try{
+    const dlg=await generateDialogue(topic);
+    clearInterval(spin);
+    S.dialogues.push(dlg); save(S);
+    openDialogue(allDialogues().length-1); // open the one we just made
+  }catch(e){
+    clearInterval(spin);
+    view.innerHTML=`<div class="card"><div class="verdict bad"><h3>Couldn't generate</h3><div class="diag">${(e&&e.message)||"Something went wrong."}</div><div class="rulebox">Check your key, OpenRouter balance, and that the model works (Grok is safest).</div></div>
+      <div class="row"><button class="act" id="dretry">Try again</button><button class="ghost" id="dhome">Back</button></div></div>`;
+    document.getElementById("dretry").onclick=()=>dlgGenerate(topic);
+    document.getElementById("dhome").onclick=dialogue;
+  }
+}
+async function generateDialogue(topic){
+  const sys=`You generate simple Dutch dialogues (CEFR A2-B1) for a learner to read aloud with her native-speaker husband.
+Return ONLY valid JSON, no markdown, no prose, in exactly this shape:
+{"title":"<short Dutch title>","setting":"<short English description>","lines":[{"who":"A","nl":"<Dutch>","en":"<English>"},{"who":"B","nl":"<Dutch>","en":"<English>"}]}
+Rules: 8 lines, strictly alternating A and B (A first). A is the learner, B is the husband. Natural, everyday spoken Dutch — the kind a couple actually says at home, not textbook phrases. Keep lines short and easy to read aloud. Every line needs an accurate English translation. Vary vocabulary and grammar naturally (include things like separable verbs, er, perfect tense where they fit).`;
+  const usr=`Write a dialogue about: ${topic}`;
+  const resp=await fetch("https://openrouter.ai/api/v1/chat/completions",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+OR_KEY,"HTTP-Referer":location.origin||"https://localhost","X-Title":"Dutch Dialogues"},
+    body:JSON.stringify({model:OR_MODEL,max_tokens:900,temperature:0.85,messages:[{role:"system",content:sys},{role:"user",content:usr}]})
+  });
+  if(!resp.ok){let d="";try{const j=await resp.json();d=j.error&&j.error.message?j.error.message:("HTTP "+resp.status);}catch(e){d="HTTP "+resp.status;}throw new Error(d);}
+  const data=await resp.json();
+  const raw=(data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||"";
+  const clean=raw.replace(/```json/gi,"").replace(/```/g,"").trim();
+  let obj;try{obj=JSON.parse(clean);}catch(e){throw new Error("Model returned non-JSON. Try again or use Grok.");}
+  if(!obj.title||!Array.isArray(obj.lines)||obj.lines.length<4)throw new Error("Incomplete dialogue. Try again.");
+  // sanitize: ensure who is A/B and fields exist
+  obj.lines=obj.lines.filter(l=>l&&l.nl&&l.en).map((l,i)=>({who:(l.who==="A"||l.who==="B")?l.who:(i%2===0?"A":"B"),nl:String(l.nl),en:String(l.en)}));
+  obj._ai=true; if(!obj.setting)obj.setting="AI dialogue";
+  return obj;
+}
+function openDialogue(i){
+  const list=allDialogues();
+  const d=list[i];
+  if(!d){ return dialogue(); }
+  view.innerHTML=`<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px">
+      <h2 style="font-family:Fraunces,serif;font-size:22px;font-weight:600">${d.title}</h2>
+    </div>
+    <p class="muted" style="margin-bottom:16px">${d.setting}${d._ai?' · AI-generated':''}</p>
+    <div class="dlg-legend">
+      <span><span class="dot a"></span> You</span>
+      <span><span class="dot b"></span> Your husband</span>
+    </div>
+    <div id="dlglines">
+      ${d.lines.map(l=>`<div class="dlg-line ${l.who==='A'?'a':'b'}">
+        <span class="dlg-who ${l.who==='A'?'a':'b'}">${l.who==='A'?'You':'Hem'}</span>
+        <div class="dlg-bubble">
+          <div class="dlg-nl">${l.nl}</div>
+          <div class="dlg-en ${dlgShowEn?'':'hidden'}">${l.en}</div>
+        </div>
+      </div>`).join("")}
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="act" id="toggleen">${dlgShowEn?'Hide English':'Show English'}</button>
+      <button class="ghost" id="dback">← All dialogues</button>
+      ${d._ai?`<button class="ghost danger" id="ddel">Delete</button>`:""}
+    </div>
+  </div>`;
+  document.getElementById("toggleen").onclick=()=>{
+    dlgShowEn=!dlgShowEn;
+    document.querySelectorAll(".dlg-en").forEach(e=>e.classList.toggle("hidden",!dlgShowEn));
+    document.getElementById("toggleen").textContent=dlgShowEn?"Hide English":"Show English";
+  };
+  document.getElementById("dback").onclick=dialogue;
+  if(d._ai){
+    document.getElementById("ddel").onclick=()=>{
+      if(confirm("Delete this AI-generated dialogue?")){
+        const genIdx=i-DIALOGUES.length; // position within S.dialogues
+        if(genIdx>=0){ S.dialogues.splice(genIdx,1); save(S); }
+        dialogue();
+      }
+    };
   }
 }
 
